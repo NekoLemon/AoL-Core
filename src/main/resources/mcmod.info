@@ -1,0 +1,16 @@
+[
+{
+  "modid": "aol_core",
+  "name": "Adventure of Lemon",
+  "description": "CatLemon's first attempt to make a mod.",
+  "version":"0.0.2",
+  "mcversion": "1.12.2",
+  "url": "https://catlemon.cn",
+  "updateUrl": "",
+  "authorList": ["CatLemon"],
+  "credits": "CatLemon",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
