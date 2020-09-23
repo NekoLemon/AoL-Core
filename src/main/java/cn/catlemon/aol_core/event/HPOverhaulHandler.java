@@ -1,4 +1,4 @@
-package cn.catlemon.aol_core.handlers;
+package cn.catlemon.aol_core.event;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -8,8 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
-public class AoLHPRelatedHandler {
-	public AoLHPRelatedHandler() {
+public class HPOverhaulHandler {
+	public HPOverhaulHandler() {
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(this);
 	}
 

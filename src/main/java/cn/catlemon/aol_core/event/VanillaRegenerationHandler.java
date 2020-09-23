@@ -1,11 +1,12 @@
-package cn.catlemon.aol_core.handlers;
+package cn.catlemon.aol_core.event;
 
+import cn.catlemon.aol_core.AoLCore;
+import cn.catlemon.aol_core.config.AoLCoreConfig;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import cn.catlemon.aol_core.config.AoLCoreConfig;
 
-@Mod.EventBusSubscriber(modid = "aol_core")
+@Mod.EventBusSubscriber(modid = AoLCore.MODID)
 public final class VanillaRegenerationHandler {
 	@SubscribeEvent
 	public static void switchVanillaRegeneration(PlayerEvent.PlayerLoggedInEvent event) {

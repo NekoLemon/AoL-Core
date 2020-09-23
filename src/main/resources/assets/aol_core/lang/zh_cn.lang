@@ -1,0 +1,27 @@
+# ---------------------------------------
+# GUI部分
+# ---------------------------------------
+gui.aol_core.config.title=配置文件
+gui.aol_core.config.mechanics=游戏机制
+gui.aol_core.config.mechanics.regenerationoverhaul=回血机制修改
+gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的和技能相关的血量与回血机制
+
+# ---------------------------------------
+# 命令部分
+# ---------------------------------------
+command.aol_core.skillpoint.usage=/skillpoint [list|reset|add|sub]
+command.aol_core.skillpoint.fail=§c异常，玩家没有SkillPoint的Capability，请联系mod作者或自行解决。
+command.aol_core.skillpoint.list.fail=你尚未拥有任何技能点
+command.aol_core.skillpoint.list.pre=你的技能点数量如下：
+command.aol_core.skillpoint.list.each=%1$s 共有 %2$d 点
+command.aol_core.skillpoint.reset.success=成功重置全部技能点
+command.aol_core.skillpoint.add.usage=/skillpoint add <技能点ID> <技能点数量> 增加指定种类技能点的数量
+command.aol_core.skillpoint.add.success=成功增加 %2$d 点 %1$s
+command.aol_core.skillpoint.sub.usage=/skillpoint sub <技能点ID> <技能点数量> 减少指定种类技能点的数量
+command.aol_core.skillpoint.sub.success=成功减少 %2$d 点 %1$s
+
+# ---------------------------------------
+# 杂项部分
+# ---------------------------------------
+misc.aol_core.skillpoint.normal=普通技能点
+misc.aol_core.skillpoint.special=特殊技能点
