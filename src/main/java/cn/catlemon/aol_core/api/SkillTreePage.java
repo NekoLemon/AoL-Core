@@ -5,9 +5,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cn.catlemon.aol_core.capability.ISkillTree;
+
 public class SkillTreePage {
 	private String _skillTreePageID;
 	private Map<String, SkillBase> _skills;
+
+	public ISkillTree parent = null;
 
 	public SkillTreePage(String skillTreePageID) {
 		_skillTreePageID = skillTreePageID;

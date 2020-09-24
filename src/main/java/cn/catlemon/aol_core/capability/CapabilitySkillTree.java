@@ -80,6 +80,7 @@ public class CapabilitySkillTree {
 			if (_pages.containsKey(page.getSkillTreePageID()))
 				return false;
 			_pages.put(page.getSkillTreePageID(), page);
+			page.parent = this;
 			return true;
 		}
 
