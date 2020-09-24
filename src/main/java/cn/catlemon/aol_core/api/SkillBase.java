@@ -6,30 +6,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 public abstract class SkillBase {
 	private boolean _learned = false;
-	private String _skillID;
-	private ResourceLocation _skillIcon;
-	private Vector<Integer> _skillIconCor;
-	private Map<String, Integer> _skillPointRequirement;
-	private Set<String> _skillDependencies;
-	private Set<String> _skillDependents;
-
-	public SkillBase(@Nonnull String skillID, ResourceLocation skillIcon, @Nonnull Vector<Integer> skillIconCor,
-			Map<String, Integer> skillPointRequirement, Set<String> skillDependencies, Set<String> skillDependents) {
-		this._skillID = skillID;
-		this._skillIcon = skillIcon;
-		this._skillIconCor = skillIconCor;
-		this._skillPointRequirement = (skillPointRequirement == null) ? new HashMap<String, Integer>()
-				: skillPointRequirement;
-		this._skillDependencies = (skillDependencies == null) ? new HashSet<String>() : skillDependencies;
-		this._skillDependents = (skillDependents == null) ? new HashSet<String>() : skillDependents;
-	}
+	protected String _skillID = null;
+	protected ResourceLocation _skillIcon = null;
+	protected Vector<Integer> _skillIconCor = null;
+	protected Map<String, Integer> _skillPointRequirement = new HashMap<String, Integer>();
+	protected Set<String> _skillDependencies = new HashSet<String>();
+	protected Set<String> _skillDependents = new HashSet<String>();
 
 	public String getSkillID() {
 		return _skillID;

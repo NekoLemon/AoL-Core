@@ -2,6 +2,8 @@ package cn.catlemon.aol_core.api;
 
 import java.util.Set;
 
+import cn.catlemon.aol_core.capability.ISkillTree;
+import net.minecraft.command.ICommandSender;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -53,6 +55,18 @@ public final class AoLEventLoader {
 		}
 	}
 
+	public static class SkillTreeInitializeEvent extends Event {
+		private ISkillTree _skillTree;
+
+		public SkillTreeInitializeEvent(ISkillTree skillTree) {
+			_skillTree = skillTree;
+		}
+
+		public boolean addPage(SkillTreePage page) {
+			return _skillTree.addPage(page);
+		}
+	}
+
 	@Cancelable
 	public static class LearnSkillEvent extends Event {
 		private String skillID;
@@ -76,6 +90,14 @@ public final class AoLEventLoader {
 
 		public final String getSkillID() {
 			return skillID;
+		}
+	}
+
+	public static class TestEvent extends Event {
+		public ICommandSender sender;
+
+		public TestEvent(ICommandSender sender) {
+			this.sender = sender;
 		}
 	}
 }

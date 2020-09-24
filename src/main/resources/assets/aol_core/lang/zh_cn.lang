@@ -25,6 +25,6 @@ command.aol_core.skillpoint.formaterror.2=§c技能点id只能由大小写字母
 # ---------------------------------------
 # 杂项部分
 # ---------------------------------------
-misc.aol_core.skillpoint.normal=普通技能点
-misc.aol_core.skillpoint.special=特殊技能点
-misc.aol_core.skillpoint.unknown=%s技能点（自定义）
+misc.skillpoint.aol_core.normal=普通技能点
+misc.skillpoint.aol_core.special=特殊技能点
+misc.skillpoint.unknown=%s技能点（自定义）

@@ -37,24 +37,24 @@ public class CommandSkillPoint extends CommandBase {
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.pre"));
 				for (int i = 0; i < typeList.size(); i++) {
 					String skillPointName = new TextComponentTranslation(
-							"misc." + AoLCore.MODID + ".skillpoint." + typeList.get(i).toLowerCase())
+							"misc.skillpoint." + typeList.get(i).toLowerCase())
 									.getUnformattedText();
 					skillPointName = (skillPointName
-							.equals("misc." + AoLCore.MODID + ".skillpoint." + typeList.get(i).toLowerCase()))
-									? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+							.equals("misc.skillpoint." + typeList.get(i).toLowerCase()))
+									? new TextComponentTranslation("misc.skillpoint.unknown",
 											typeList.get(i).toLowerCase()).getFormattedText()
 									: skillPointName;
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.each",
 									skillPointName, skillPoint.getSPNum(typeList.get(i))));
 				}
-				break;
+				return;
 			}
 			case "reset": {
 				skillPoint.reset();
 				sender.sendMessage(
 						new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.reset.success"));
-				break;
+				return;
 			}
 			case "add": {
 				if (args.length < 3)
@@ -71,16 +71,16 @@ public class CommandSkillPoint extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				}
 				String skillPointName = new TextComponentTranslation(
-						"misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()).getUnformattedText();
+						"misc.skillpoint." + args[1].toLowerCase()).getUnformattedText();
 				skillPointName = (skillPointName
-						.equals("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()))
-								? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+						.equals("misc.skillpoint." + args[1].toLowerCase()))
+								? new TextComponentTranslation("misc.skillpoint.unknown",
 										args[1].toLowerCase()).getFormattedText()
 								: skillPointName;
 				skillPoint.addSPNum(args[1].toLowerCase(), num);
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.add.success",
 						skillPointName, args[2]));
-				break;
+				return;
 			}
 			case "sub": {
 				if (args.length < 3)
@@ -97,10 +97,10 @@ public class CommandSkillPoint extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
 				}
 				String skillPointName = new TextComponentTranslation(
-						"misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()).getUnformattedText();
+						"misc.skillpoint." + args[1].toLowerCase()).getUnformattedText();
 				skillPointName = (skillPointName
-						.equals("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()))
-								? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+						.equals("misc.skillpoint." + args[1].toLowerCase()))
+								? new TextComponentTranslation("misc.skillpoint.unknown",
 										args[1].toLowerCase()).getFormattedText()
 								: skillPointName;
 				if (skillPoint.subSPNum(args[1].toLowerCase(), num))
@@ -109,7 +109,7 @@ public class CommandSkillPoint extends CommandBase {
 				else
 					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.sub.fail",
 							skillPointName, args[2]));
-				break;
+				return;
 			}
 			default: {
 				throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.usage");

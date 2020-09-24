@@ -9,6 +9,7 @@ import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.event.AoLEventHandler;
 import cn.catlemon.aol_core.event.CommandHandler;
 import cn.catlemon.aol_core.network.NetworkHandler;
+import cn.catlemon.aol_core.skill.AoLSkillPageHandler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +23,7 @@ public class AoLCore {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		new AoLSkillPageHandler(event);
 		new CapabilityHandler(event);
 		new NetworkHandler(event);
 	}

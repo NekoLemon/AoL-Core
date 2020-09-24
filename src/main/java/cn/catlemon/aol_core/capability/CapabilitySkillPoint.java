@@ -26,6 +26,8 @@ public class CapabilitySkillPoint {
 		@Override
 		public void readNBT(Capability<ISkillPoint> capability, ISkillPoint instance, EnumFacing side, NBTBase nbt) {
 			NBTTagList list = (NBTTagList) nbt;
+			if (list == null)
+				return;
 			int num = list.tagCount();
 			for (int i = 0; i < num; i++) {
 				NBTTagCompound compound = list.getCompoundTagAt(i);
@@ -59,8 +61,6 @@ public class CapabilitySkillPoint {
 		private static Set<String> defaultType = new HashSet<String>();
 
 		public Implementation() {
-			defaultType.add("normal");
-			defaultType.add("special");
 			AoLEventLoader.CapabilitySkillPointInitializeEvent event = new AoLEventLoader.CapabilitySkillPointInitializeEvent(
 					defaultType);
 			AoLEventLoader.AOL_EVENT_BUS.post(event);
@@ -78,7 +78,7 @@ public class CapabilitySkillPoint {
 			Collections.sort(list);
 			return list;
 		}
-		
+
 		@Override
 		public void reset() {
 			_data.clear();

@@ -46,7 +46,9 @@ public class SkillTreePage {
 		if (_skills.get(skillID).isLearned())
 			return false;
 		// #TODO Add a listener
-		if (AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.LearnSkillEvent(skillID))) {
+		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(skillID);
+		AoLEventLoader.AOL_EVENT_BUS.post(event);
+		if (!event.isCanceled()) {
 			_skills.get(skillID).learn();
 			return true;
 		}
@@ -66,7 +68,9 @@ public class SkillTreePage {
 		if (!_skills.get(skillID).isLearned())
 			return false;
 		// #TODO Add a listener
-		if (AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.ForgetSkillEvent(skillID))) {
+		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(skillID);
+		AoLEventLoader.AOL_EVENT_BUS.post(event);
+		if (!event.isCanceled()) {
 			_skills.get(skillID).forget();
 			return true;
 		}
