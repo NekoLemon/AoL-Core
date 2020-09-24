@@ -36,6 +36,7 @@ minecraft {
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
+        sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir 
         client {
             workingDirectory project.file('run')
 
@@ -89,7 +90,7 @@ jar {
         attributes([
             "Specification-Title": "aol_core",
             "Specification-Vendor": "catlemon",
-            "Specification-Version": "0.0.1", // We are version 1 of ourselves
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"catlemon",
@@ -117,8 +118,13 @@ publishing {
     }
 }
 
-sourceSets {
-    main {
-        output.resourcesDir = output.classesDir 
-    } 
+task buildapi(type: Jar) {
+    classifier = 'api'
+    from sourceSets.main.output
+    from sourceSets.main.allSource
+    include 'cn/catlemon/aol_core/api/*'
+}
+
+artifacts {
+    archives buildapi
 }

@@ -3,13 +3,15 @@ package cn.catlemon.aol_core.capability;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import cn.catlemon.aol_core.api.ISkillPoint;
+import cn.catlemon.aol_core.api.AoLEventLoader;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -28,7 +30,7 @@ public class CapabilitySkillPoint {
 			for (int i = 0; i < num; i++) {
 				NBTTagCompound compound = list.getCompoundTagAt(i);
 				if (!compound.hasNoTags()) {
-					instance.setSkillPoint(compound.getString("SkillPointType"), compound.getInteger("SkillPointNum"));
+					instance.setSPNum(compound.getString("SkillPointType"), compound.getInteger("SkillPointNum"));
 				}
 			}
 
@@ -38,11 +40,11 @@ public class CapabilitySkillPoint {
 		@Override
 		public NBTBase writeNBT(Capability<ISkillPoint> capability, ISkillPoint instance, EnumFacing side) {
 			NBTTagList list = new NBTTagList();
-			List<String> skillPointTypeList = instance.getSkillPointTypeList();
+			List<String> skillPointTypeList = instance.getSPTypeList();
 			for (String skillPointType : skillPointTypeList) {
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setString("SkillPointType", skillPointType);
-				compound.setInteger("SkillPointNum", instance.getSkillPoint(skillPointType));
+				compound.setInteger("SkillPointNum", instance.getSPNum(skillPointType));
 				list.appendTag(compound);
 			}
 			return list;
@@ -54,13 +56,21 @@ public class CapabilitySkillPoint {
 	public static class Implementation implements ISkillPoint {
 		private Map<String, Integer> _data = new HashMap<String, Integer>();
 
+		private static Set<String> defaultType = new HashSet<String>();
+
 		public Implementation() {
-			_data.put("normal", 0);
-			_data.put("special", 0);
+			defaultType.add("normal");
+			defaultType.add("special");
+			AoLEventLoader.CapabilitySkillPointInitializeEvent event = new AoLEventLoader.CapabilitySkillPointInitializeEvent(
+					defaultType);
+			AoLEventLoader.AOL_EVENT_BUS.post(event);
+			for (String type : defaultType)
+				_data.put(type, 0);
+
 		}
 
 		@Override
-		public List<String> getSkillPointTypeList() {
+		public List<String> getSPTypeList() {
 			List<String> list = new ArrayList<String>();
 			for (Map.Entry<String, Integer> entry : _data.entrySet()) {
 				list.add(entry.getKey());
@@ -68,16 +78,27 @@ public class CapabilitySkillPoint {
 			Collections.sort(list);
 			return list;
 		}
+		
+		@Override
+		public void reset() {
+			_data.clear();
+			for (String type : defaultType)
+				_data.put(type, 0);
+		}
 
 		@Override
-		public int getSkillPoint(String skillPointType) {
+		public int getSPNum(String skillPointType) {
+			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			skillPointType = skillPointType.toLowerCase();
 			if (!_data.containsKey(skillPointType))
 				return 0;
 			return _data.get(skillPointType);
 		}
 
 		@Override
-		public int setSkillPoint(String skillPointType, int skillPointNum) {
+		public int setSPNum(String skillPointType, int skillPointNum) {
+			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			skillPointType = skillPointType.toLowerCase();
 			if (_data.containsKey(skillPointType)) {
 				int oldNum = _data.get(skillPointType);
 				_data.replace(skillPointType, skillPointNum);
@@ -88,7 +109,9 @@ public class CapabilitySkillPoint {
 		}
 
 		@Override
-		public boolean addSkillPoint(String skillPointType, int skillPointNum) {
+		public boolean addSPNum(String skillPointType, int skillPointNum) {
+			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
 			if (!_data.containsKey(skillPointType)) {
 				_data.put(skillPointType, skillPointNum);
@@ -99,7 +122,9 @@ public class CapabilitySkillPoint {
 		}
 
 		@Override
-		public boolean subSkillPoint(String skillPointType, int skillPointNum) {
+		public boolean subSPNum(String skillPointType, int skillPointNum) {
+			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
 			if (!_data.containsKey(skillPointType) || _data.get(skillPointType) < skillPointNum)
 				return false;

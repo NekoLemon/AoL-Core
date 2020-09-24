@@ -10,7 +10,6 @@ gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的
 # 命令部分
 # ---------------------------------------
 command.aol_core.skillpoint.usage=/skillpoint [list|reset|add|sub]
-command.aol_core.skillpoint.fail=§c异常，玩家没有SkillPoint的Capability，请联系mod作者或自行解决。
 command.aol_core.skillpoint.list.fail=你尚未拥有任何技能点
 command.aol_core.skillpoint.list.pre=你的技能点数量如下：
 command.aol_core.skillpoint.list.each=%1$s 共有 %2$d 点
@@ -19,9 +18,13 @@ command.aol_core.skillpoint.add.usage=/skillpoint add <技能点ID> <技能点�
 command.aol_core.skillpoint.add.success=成功增加 %2$d 点 %1$s
 command.aol_core.skillpoint.sub.usage=/skillpoint sub <技能点ID> <技能点数量> 减少指定种类技能点的数量
 command.aol_core.skillpoint.sub.success=成功减少 %2$d 点 %1$s
+command.aol_core.skillpoint.sub.fail=§c操作失败： %1$s 数量不足 %2$d
+command.aol_core.skillpoint.formaterror.1=§c变更的技能点数量只能为正数
+command.aol_core.skillpoint.formaterror.2=§c技能点id只能由大小写字母、数字、连字符和下划线组成
 
 # ---------------------------------------
 # 杂项部分
 # ---------------------------------------
 misc.aol_core.skillpoint.normal=普通技能点
 misc.aol_core.skillpoint.special=特殊技能点
+misc.aol_core.skillpoint.unknown=%s技能点（自定义）

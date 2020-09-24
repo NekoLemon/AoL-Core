@@ -3,8 +3,8 @@ package cn.catlemon.aol_core.command;
 import java.util.List;
 
 import cn.catlemon.aol_core.AoLCore;
-import cn.catlemon.aol_core.api.ISkillPoint;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
+import cn.catlemon.aol_core.capability.ISkillPoint;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -22,13 +22,13 @@ public class CommandSkillPoint extends CommandBase {
 			throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.usage");
 		EntityPlayerMP player = CommandBase.getCommandSenderAsPlayer(sender);
 		if (!player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
-			sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.fail"));
+			AoLCore.LOGGER.error("玩家\"" + player.getName() + "\"没有SkillPoint的Capability，请寻求mod作者的帮助。");
 			return;
 		}
 		ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
 		switch (args[0]) {
 			case "list": {
-				List<String> typeList = skillPoint.getSkillPointTypeList();
+				List<String> typeList = skillPoint.getSPTypeList();
 				if (typeList.size() == 0) {
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.fail"));
@@ -36,20 +36,22 @@ public class CommandSkillPoint extends CommandBase {
 				}
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.pre"));
 				for (int i = 0; i < typeList.size(); i++) {
+					String skillPointName = new TextComponentTranslation(
+							"misc." + AoLCore.MODID + ".skillpoint." + typeList.get(i).toLowerCase())
+									.getUnformattedText();
+					skillPointName = (skillPointName
+							.equals("misc." + AoLCore.MODID + ".skillpoint." + typeList.get(i).toLowerCase()))
+									? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+											typeList.get(i).toLowerCase()).getFormattedText()
+									: skillPointName;
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.each",
-									new TextComponentTranslation(
-											"misc." + AoLCore.MODID + ".skillpoint." + typeList.get(i).toLowerCase())
-													.getFormattedText(),
-									skillPoint.getSkillPoint(typeList.get(i))));
+									skillPointName, skillPoint.getSPNum(typeList.get(i))));
 				}
 				break;
 			}
 			case "reset": {
-				List<String> typeList = skillPoint.getSkillPointTypeList();
-				for (int i = 0; i < typeList.size(); i++) {
-					skillPoint.setSkillPoint(typeList.get(i), 0);
-				}
+				skillPoint.reset();
 				sender.sendMessage(
 						new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.reset.success"));
 				break;
@@ -58,26 +60,55 @@ public class CommandSkillPoint extends CommandBase {
 				if (args.length < 3)
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				int num = CommandBase.parseInt(args[2]);
-				if (num < 0)
+				if (num < 0) {
+					sender.sendMessage(
+							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.1"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
-				skillPoint.addSkillPoint(args[1].toLowerCase(), num);
+				}
+				if (!args[1].matches("[A-Za-z0-9_-]+")) {
+					sender.sendMessage(
+							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
+					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
+				}
+				String skillPointName = new TextComponentTranslation(
+						"misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()).getUnformattedText();
+				skillPointName = (skillPointName
+						.equals("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()))
+								? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+										args[1].toLowerCase()).getFormattedText()
+								: skillPointName;
+				skillPoint.addSPNum(args[1].toLowerCase(), num);
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.add.success",
-						new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase())
-								.getFormattedText(),
-						args[2]));
+						skillPointName, args[2]));
 				break;
 			}
 			case "sub": {
 				if (args.length < 3)
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
 				int num = CommandBase.parseInt(args[2]);
-				if (num < 0)
+				if (num < 0) {
+					sender.sendMessage(
+							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.1"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
-				skillPoint.subSkillPoint(args[1].toLowerCase(), num);
-				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.sub.success",
-						new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase())
-								.getFormattedText(),
-						args[2]));
+				}
+				if (!args[1].matches("[A-Za-z0-9_-]+")) {
+					sender.sendMessage(
+							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
+					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
+				}
+				String skillPointName = new TextComponentTranslation(
+						"misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()).getUnformattedText();
+				skillPointName = (skillPointName
+						.equals("misc." + AoLCore.MODID + ".skillpoint." + args[1].toLowerCase()))
+								? new TextComponentTranslation("misc." + AoLCore.MODID + ".skillpoint.unknown",
+										args[1].toLowerCase()).getFormattedText()
+								: skillPointName;
+				if (skillPoint.subSPNum(args[1].toLowerCase(), num))
+					sender.sendMessage(new TextComponentTranslation(
+							"command." + AoLCore.MODID + ".skillpoint.sub.success", skillPointName, args[2]));
+				else
+					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.sub.fail",
+							skillPointName, args[2]));
 				break;
 			}
 			default: {
@@ -107,6 +138,19 @@ public class CommandSkillPoint extends CommandBase {
 		if (args.length == 1) {
 			String[] commands = { "list", "reset", "add", "sub" };
 			return CommandBase.getListOfStringsMatchingLastWord(args, commands);
+		} else if (args.length == 2 && (args[0].equals("add") || args[0].equals("sub"))) {
+			try {
+				EntityPlayerMP player = CommandBase.getCommandSenderAsPlayer(sender);
+				if (!player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
+					AoLCore.LOGGER.error("玩家\"" + player.getName() + "\"没有SkillPoint的Capability，请寻求mod作者的帮助。");
+					return null;
+				}
+				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
+				List<String> typeList = skillPoint.getSPTypeList();
+				return CommandBase.getListOfStringsMatchingLastWord(args, typeList);
+			} catch (CommandException e) {
+				return null;
+			}
 		}
 		return null;
 	}

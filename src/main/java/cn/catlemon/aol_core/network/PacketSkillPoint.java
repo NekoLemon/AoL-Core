@@ -2,8 +2,8 @@ package cn.catlemon.aol_core.network;
 
 import javax.annotation.Nullable;
 
-import cn.catlemon.aol_core.api.ISkillPoint;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
+import cn.catlemon.aol_core.capability.ISkillPoint;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
