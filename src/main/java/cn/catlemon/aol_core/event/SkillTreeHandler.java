@@ -26,31 +26,35 @@ public final class SkillTreeHandler {
 	public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			ICapabilitySerializable<NBTTagCompound> providerSkillTree = new CapabilitySkillTree.ProviderPlayer();
-			event.addCapability(new ResourceLocation(AoLCore.MODID+":skilltree"), providerSkillTree);
+			event.addCapability(new ResourceLocation(AoLCore.MODID + ":skilltree"), providerSkillTree);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerClone(Clone event) {
-		Capability<ISkillTree> capabilitySkillTree=CapabilityHandler.capSkillTree;
-		Capability.IStorage<ISkillTree> storageSkillTree=capabilitySkillTree.getStorage();
-		if(event.getOriginal().hasCapability(capabilitySkillTree, null) && event.getEntityPlayer().hasCapability(capabilitySkillTree, null)){
-            NBTBase nbt = storageSkillTree.writeNBT(capabilitySkillTree, event.getOriginal().getCapability(capabilitySkillTree, null), null);
-            storageSkillTree.readNBT(capabilitySkillTree, event.getEntityPlayer().getCapability(capabilitySkillTree, null), null, nbt);
-        }
+		Capability<ISkillTree> capabilitySkillTree = CapabilityHandler.capSkillTree;
+		Capability.IStorage<ISkillTree> storageSkillTree = capabilitySkillTree.getStorage();
+		if (event.getOriginal().hasCapability(capabilitySkillTree, null)
+				&& event.getEntityPlayer().hasCapability(capabilitySkillTree, null)) {
+			NBTBase nbt = storageSkillTree.writeNBT(capabilitySkillTree,
+					event.getOriginal().getCapability(capabilitySkillTree, null), null);
+			storageSkillTree.readNBT(capabilitySkillTree,
+					event.getEntityPlayer().getCapability(capabilitySkillTree, null), null, nbt);
+		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-		if(!event.player.world.isRemote) {
-			EntityPlayerMP player=(EntityPlayerMP) event.player;
-			if(player.hasCapability(CapabilityHandler.capSkillTree, null)) {
-				PacketSkillTree message=new PacketSkillTree();
-				ISkillTree skillTree=player.getCapability(CapabilityHandler.capSkillTree, null);
-				Capability.IStorage<ISkillTree> storage=CapabilityHandler.capSkillTree.getStorage();
-				message.compound=new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.tagSkillTree,storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
-				NetworkHandler.network.sendTo(message, (EntityPlayerMP)player);
+		if (!event.player.world.isRemote) {
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			if (player.hasCapability(CapabilityHandler.capSkillTree, null)) {
+				PacketSkillTree message = new PacketSkillTree();
+				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
+				Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
+				message.compound = new NBTTagCompound();
+				message.compound.setTag(CapabilityHandler.tagSkillTree,
+						storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
+				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 			}
 		}
 	}

@@ -22,7 +22,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class CapabilitySkillPoint {
 	public static class Storage implements Capability.IStorage<ISkillPoint> {
-
+		
 		@Override
 		public void readNBT(Capability<ISkillPoint> capability, ISkillPoint instance, EnumFacing side, NBTBase nbt) {
 			NBTTagList list = (NBTTagList) nbt;
@@ -35,9 +35,9 @@ public class CapabilitySkillPoint {
 					instance.setSPNum(compound.getString("SkillPointType"), compound.getInteger("SkillPointNum"));
 				}
 			}
-
+			
 		}
-
+		
 		@Nullable
 		@Override
 		public NBTBase writeNBT(Capability<ISkillPoint> capability, ISkillPoint instance, EnumFacing side) {
@@ -50,25 +50,25 @@ public class CapabilitySkillPoint {
 				list.appendTag(compound);
 			}
 			return list;
-
+			
 		}
-
+		
 	}
-
+	
 	public static class Implementation implements ISkillPoint {
 		private Map<String, Integer> _data = new HashMap<String, Integer>();
-
+		
 		private static Set<String> defaultType = new HashSet<String>();
-
+		
 		public Implementation() {
 			AoLEventLoader.CapabilitySkillPointInitializeEvent event = new AoLEventLoader.CapabilitySkillPointInitializeEvent(
 					defaultType);
 			AoLEventLoader.AOL_EVENT_BUS.post(event);
 			for (String type : defaultType)
 				_data.put(type, 0);
-
+			
 		}
-
+		
 		@Override
 		public List<String> getSPTypeList() {
 			List<String> list = new ArrayList<String>();
@@ -78,14 +78,14 @@ public class CapabilitySkillPoint {
 			Collections.sort(list);
 			return list;
 		}
-
+		
 		@Override
 		public void reset() {
 			_data.clear();
 			for (String type : defaultType)
 				_data.put(type, 0);
 		}
-
+		
 		@Override
 		public int getSPNum(String skillPointType) {
 			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
@@ -94,7 +94,7 @@ public class CapabilitySkillPoint {
 				return 0;
 			return _data.get(skillPointType);
 		}
-
+		
 		@Override
 		public int setSPNum(String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
@@ -107,7 +107,7 @@ public class CapabilitySkillPoint {
 			_data.put(skillPointType, skillPointNum);
 			return skillPointNum;
 		}
-
+		
 		@Override
 		public boolean addSPNum(String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
@@ -120,7 +120,7 @@ public class CapabilitySkillPoint {
 			_data.replace(skillPointType, _data.get(skillPointType) + skillPointNum);
 			return false;
 		}
-
+		
 		@Override
 		public boolean subSPNum(String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
@@ -132,17 +132,17 @@ public class CapabilitySkillPoint {
 			return true;
 		}
 	}
-
+	
 	public static class ProviderPlayer implements ICapabilitySerializable<NBTTagCompound>, ICapabilityProvider {
 		private ISkillPoint skillPoint = new Implementation();
-
+		
 		private Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
-
+		
 		@Override
 		public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 			return CapabilityHandler.capSkillPoint.equals(capability);
 		}
-
+		
 		@Nullable
 		@Override
 		public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
@@ -153,7 +153,7 @@ public class CapabilitySkillPoint {
 			}
 			return null;
 		}
-
+		
 		@Override
 		public NBTTagCompound serializeNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
@@ -161,12 +161,12 @@ public class CapabilitySkillPoint {
 					storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
 			return compound;
 		}
-
+		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
 			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.tagSkillPoint);
 			storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, list);
 		}
-
+		
 	}
 }

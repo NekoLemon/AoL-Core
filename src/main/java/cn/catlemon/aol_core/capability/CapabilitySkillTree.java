@@ -21,7 +21,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class CapabilitySkillTree {
 	public static class Storage implements Capability.IStorage<ISkillTree> {
-
+		
 		@Override
 		public void readNBT(Capability<ISkillTree> capability, ISkillTree instance, EnumFacing side, NBTBase nbt) {
 			NBTTagList list = (NBTTagList) nbt;
@@ -34,7 +34,7 @@ public class CapabilitySkillTree {
 					instance.setSkillStat(compound.getString("SkillID"), compound.getBoolean("SkillLearned"));
 			}
 		}
-
+		
 		@Nullable
 		@Override
 		public NBTBase writeNBT(Capability<ISkillTree> capability, ISkillTree instance, EnumFacing side) {
@@ -51,17 +51,17 @@ public class CapabilitySkillTree {
 			}
 			return list;
 		}
-
+		
 	}
-
+	
 	public static class Implementation implements ISkillTree {
 		Map<String, SkillTreePage> _pages;
-
+		
 		public Implementation() {
 			_pages = new HashMap<String, SkillTreePage>();
 			AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.SkillTreeInitializeEvent(this));
 		}
-
+		
 		@Override
 		public Set<String> getPageList() {
 			Set<String> pageList = new HashSet<String>();
@@ -69,12 +69,12 @@ public class CapabilitySkillTree {
 				pageList.add(entry.getKey());
 			return pageList;
 		}
-
+		
 		@Override
 		public boolean hasPage(@Nonnull String pageID) {
 			return _pages.containsKey(pageID);
 		}
-
+		
 		@Override
 		public boolean addPage(@Nonnull SkillTreePage page) {
 			if (_pages.containsKey(page.getSkillTreePageID()))
@@ -83,14 +83,14 @@ public class CapabilitySkillTree {
 			page.parent = this;
 			return true;
 		}
-
+		
 		@Override
 		public SkillTreePage getPage(String pageID) {
 			if (!_pages.containsKey(pageID))
 				return null;
 			return _pages.get(pageID);
 		}
-
+		
 		@Override
 		public void setSkillStat(String skillID, boolean status) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
@@ -104,7 +104,7 @@ public class CapabilitySkillTree {
 				}
 			}
 		}
-
+		
 		@Override
 		public boolean learnSkill(String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
@@ -114,7 +114,7 @@ public class CapabilitySkillTree {
 			}
 			return false;
 		}
-
+		
 		@Override
 		public boolean learnSkill(String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
@@ -124,7 +124,7 @@ public class CapabilitySkillTree {
 			}
 			return false;
 		}
-
+		
 		@Override
 		public boolean forgetSkill(String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
@@ -134,7 +134,7 @@ public class CapabilitySkillTree {
 			}
 			return false;
 		}
-
+		
 		@Override
 		public boolean forgetSkill(String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
@@ -144,19 +144,19 @@ public class CapabilitySkillTree {
 			}
 			return false;
 		}
-
+		
 	}
-
+	
 	public static class ProviderPlayer implements ICapabilitySerializable<NBTTagCompound>, ICapabilityProvider {
 		private ISkillTree skillTree = new Implementation();
-
+		
 		private Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
-
+		
 		@Override
 		public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 			return CapabilityHandler.capSkillTree.equals(capability);
 		}
-
+		
 		@Nullable
 		@Override
 		public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
@@ -167,7 +167,7 @@ public class CapabilitySkillTree {
 			}
 			return null;
 		}
-
+		
 		@Override
 		public NBTTagCompound serializeNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
@@ -175,12 +175,12 @@ public class CapabilitySkillTree {
 					storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
 			return compound;
 		}
-
+		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
 			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.tagSkillTree);
 			storage.readNBT(CapabilityHandler.capSkillTree, skillTree, null, list);
 		}
-
+		
 	}
 }

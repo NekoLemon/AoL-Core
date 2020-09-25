@@ -26,31 +26,35 @@ public final class SkillPointHandler {
 	public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			ICapabilitySerializable<NBTTagCompound> providerSkillPoint = new CapabilitySkillPoint.ProviderPlayer();
-			event.addCapability(new ResourceLocation(AoLCore.MODID+":skillpoint"), providerSkillPoint);
+			event.addCapability(new ResourceLocation(AoLCore.MODID + ":skillpoint"), providerSkillPoint);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerClone(Clone event) {
-		Capability<ISkillPoint> capabilitySkillPoint=CapabilityHandler.capSkillPoint;
-		Capability.IStorage<ISkillPoint> storageSkillPoint=capabilitySkillPoint.getStorage();
-		if(event.getOriginal().hasCapability(capabilitySkillPoint, null) && event.getEntityPlayer().hasCapability(capabilitySkillPoint, null)){
-            NBTBase nbt = storageSkillPoint.writeNBT(capabilitySkillPoint, event.getOriginal().getCapability(capabilitySkillPoint, null), null);
-            storageSkillPoint.readNBT(capabilitySkillPoint, event.getEntityPlayer().getCapability(capabilitySkillPoint, null), null, nbt);
-        }
+		Capability<ISkillPoint> capabilitySkillPoint = CapabilityHandler.capSkillPoint;
+		Capability.IStorage<ISkillPoint> storageSkillPoint = capabilitySkillPoint.getStorage();
+		if (event.getOriginal().hasCapability(capabilitySkillPoint, null)
+				&& event.getEntityPlayer().hasCapability(capabilitySkillPoint, null)) {
+			NBTBase nbt = storageSkillPoint.writeNBT(capabilitySkillPoint,
+					event.getOriginal().getCapability(capabilitySkillPoint, null), null);
+			storageSkillPoint.readNBT(capabilitySkillPoint,
+					event.getEntityPlayer().getCapability(capabilitySkillPoint, null), null, nbt);
+		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-		if(!event.player.world.isRemote) {
-			EntityPlayerMP player=(EntityPlayerMP) event.player;
-			if(player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
-				PacketSkillPoint message=new PacketSkillPoint();
-				ISkillPoint skillPoint=player.getCapability(CapabilityHandler.capSkillPoint, null);
-				Capability.IStorage<ISkillPoint> storage=CapabilityHandler.capSkillPoint.getStorage();
-				message.compound=new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.tagSkillPoint,storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
-				NetworkHandler.network.sendTo(message, (EntityPlayerMP)player);
+		if (!event.player.world.isRemote) {
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
+				PacketSkillPoint message = new PacketSkillPoint();
+				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
+				Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
+				message.compound = new NBTTagCompound();
+				message.compound.setTag(CapabilityHandler.tagSkillPoint,
+						storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
+				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 			}
 		}
 	}

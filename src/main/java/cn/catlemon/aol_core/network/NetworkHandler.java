@@ -10,7 +10,7 @@ public final class NetworkHandler {
 	public static SimpleNetworkWrapper network;
 	
 	public NetworkHandler(FMLPreInitializationEvent event) {
-		network=NetworkRegistry.INSTANCE.newSimpleChannel(AoLCore.MODID);
+		network = NetworkRegistry.INSTANCE.newSimpleChannel(AoLCore.MODID);
 		network.registerMessage(new PacketSkillPoint.Handler(), PacketSkillPoint.class, 1, Side.CLIENT);
 		network.registerMessage(new PacketSkillTree.Handler(), PacketSkillTree.class, 1, Side.CLIENT);
 	}

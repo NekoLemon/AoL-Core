@@ -20,19 +20,19 @@ public class AoLCore {
 	public static final String NAME = "Adventure of Lemon";
 	public static final String VERSION = "0.0.1";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
-
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		new AoLSkillPageHandler(event);
 		new CapabilityHandler(event);
 		new NetworkHandler(event);
 	}
-
+	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		new AoLEventHandler(event);
 	}
-
+	
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		new CommandHandler(event);

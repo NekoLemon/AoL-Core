@@ -6,7 +6,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AoLSkillPageHandler {
-	public static SkillTreePage pageExample=new SkillTreePage("aol_core.example");
+	public static SkillTreePage pageExample = new SkillTreePage("aol_core.example");
+	
 	public AoLSkillPageHandler(FMLPreInitializationEvent event) {
 		AoLEventLoader.AOL_EVENT_BUS.register(this);
 		pageExample.addSkill(new SkillExample());

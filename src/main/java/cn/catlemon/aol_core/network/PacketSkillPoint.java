@@ -18,37 +18,37 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketSkillPoint implements IMessage {
 	public NBTTagCompound compound;
-
+	
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		compound = ByteBufUtils.readTag(buf);
-
+		
 	}
-
+	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeTag(buf, compound);
 	}
-
+	
 	public static class Handler implements IMessageHandler<PacketSkillPoint, IMessage> {
 		@Nullable
-        @Override
-        public IMessage onMessage(PacketSkillPoint message, MessageContext mctx) {
-            if(mctx.side == Side.CLIENT) {
-                final NBTBase nbt = message.compound.getTag(CapabilityHandler.tagSkillPoint);
-                Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        EntityPlayer player = Minecraft.getMinecraft().player;
-                        if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
-                            ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
-                            Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
-                            storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, nbt);
-                        }
-                    }
-                });
-            }
-            return null;
-        }
-    }
+		@Override
+		public IMessage onMessage(PacketSkillPoint message, MessageContext mctx) {
+			if (mctx.side == Side.CLIENT) {
+				final NBTBase nbt = message.compound.getTag(CapabilityHandler.tagSkillPoint);
+				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+					@Override
+					public void run() {
+						EntityPlayer player = Minecraft.getMinecraft().player;
+						if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
+							ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
+							Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
+							storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, nbt);
+						}
+					}
+				});
+			}
+			return null;
+		}
+	}
 }
