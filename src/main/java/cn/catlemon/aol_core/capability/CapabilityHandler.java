@@ -23,12 +23,11 @@ public final class CapabilityHandler {
 	@CapabilityInject(ISkillTree.class)
 	public static Capability<ISkillTree> capSkillTree;
 	
-	@SuppressWarnings("deprecation")
 	public CapabilityHandler(FMLPreInitializationEvent event) {
 		CapabilityManager.INSTANCE.register(ISkillPoint.class, new CapabilitySkillPoint.Storage(),
-				CapabilitySkillPoint.Implementation.class);
+				CapabilitySkillPoint.Implementation::new);
 		CapabilityManager.INSTANCE.register(ISkillTree.class, new CapabilitySkillTree.Storage(),
-				CapabilitySkillTree.Implementation.class);
+				CapabilitySkillTree.Implementation::new);
 		AoLEventLoader.AOL_EVENT_BUS.register(this);
 	}
 	
