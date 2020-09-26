@@ -18,7 +18,7 @@ public final class AoLEventLoader {
 		private Set<String> defaultSPType;
 		
 		public boolean addDefaultSPType(String defaultSPTypeName) {
-			assert (defaultSPTypeName.matches("[A-Za-z0-9_-]+"));
+			assert (defaultSPTypeName.matches("[A-Za-z0-9_\\-\\.]+"));
 			defaultSPTypeName = defaultSPTypeName.toLowerCase();
 			if (defaultSPType.contains(defaultSPTypeName))
 				return false;
@@ -29,7 +29,7 @@ public final class AoLEventLoader {
 		public int addDefaultSPType(String[] defaultSPTypeNameList) {
 			int cnt = 0;
 			for (String defaultSPTypeName : defaultSPTypeNameList) {
-				assert (defaultSPTypeName.matches("[A-Za-z0-9_-]+"));
+				assert (defaultSPTypeName.matches("[A-Za-z0-9_\\-\\.]+"));
 				defaultSPTypeName = defaultSPTypeName.toLowerCase();
 				if (!defaultSPType.contains(defaultSPTypeName)) {
 					defaultSPType.add(defaultSPTypeName);
@@ -42,7 +42,7 @@ public final class AoLEventLoader {
 		public int addDefaultSPType(Iterable<String> defaultSPTypeNameList) {
 			int cnt = 0;
 			for (String defaultSPTypeName : defaultSPTypeNameList) {
-				assert (defaultSPTypeName.matches("[A-Za-z0-9_-]+"));
+				assert (defaultSPTypeName.matches("[A-Za-z0-9_\\-\\.]+"));
 				defaultSPTypeName = defaultSPTypeName.toLowerCase();
 				if (!defaultSPType.contains(defaultSPTypeName)) {
 					defaultSPType.add(defaultSPTypeName);

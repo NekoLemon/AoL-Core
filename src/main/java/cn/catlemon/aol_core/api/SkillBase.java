@@ -19,7 +19,7 @@ public abstract class SkillBase {
 	protected Vector<Integer> _skillIconCor = null;
 	protected Map<String, Integer> _skillPointRequirement = new HashMap<String, Integer>();
 	protected Set<String> _skillDependencies = new HashSet<String>();
-	protected Set<String> _skillDependents = new HashSet<String>();
+	private Set<String> _skillDependents = new HashSet<String>();
 	
 	public String getSkillID() {
 		return _skillID;

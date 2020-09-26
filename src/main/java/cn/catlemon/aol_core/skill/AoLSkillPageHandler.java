@@ -11,6 +11,7 @@ public class AoLSkillPageHandler {
 	public AoLSkillPageHandler(FMLPreInitializationEvent event) {
 		AoLEventLoader.AOL_EVENT_BUS.register(this);
 		pageExample.addSkill(new SkillExample());
+		pageExample.addSkill(new SkillExample2());
 	}
 	
 	@SubscribeEvent

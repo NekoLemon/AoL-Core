@@ -20,7 +20,7 @@ command.aol_core.skillpoint.sub.usage=/skillpoint sub <技能点ID> <技能点�
 command.aol_core.skillpoint.sub.success=成功减少 %2$d 点 %1$s
 command.aol_core.skillpoint.sub.fail=§c操作失败： %1$s 数量不足 %2$d
 command.aol_core.skillpoint.formaterror.1=§c变更的技能点数量只能为正数
-command.aol_core.skillpoint.formaterror.2=§c技能点id只能由大小写字母、数字、连字符和下划线组成
+command.aol_core.skillpoint.formaterror.2=§c技能点id只能由大小写字母、数字、小数点、连字符和下划线组成
 
 # ---------------------------------------
 # 杂项部分

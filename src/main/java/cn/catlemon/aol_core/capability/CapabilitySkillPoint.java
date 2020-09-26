@@ -88,7 +88,7 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public int getSPNum(String skillPointType) {
-			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			if (!_data.containsKey(skillPointType))
 				return 0;
@@ -97,7 +97,7 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public int setSPNum(String skillPointType, int skillPointNum) {
-			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			if (_data.containsKey(skillPointType)) {
 				int oldNum = _data.get(skillPointType);
@@ -110,7 +110,7 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public boolean addSPNum(String skillPointType, int skillPointNum) {
-			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
 			if (!_data.containsKey(skillPointType)) {
@@ -123,7 +123,7 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public boolean subSPNum(String skillPointType, int skillPointNum) {
-			assert (skillPointType.matches("[A-Za-z0-9_-]+"));
+			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
 			if (!_data.containsKey(skillPointType) || _data.get(skillPointType) < skillPointNum)

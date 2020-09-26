@@ -63,7 +63,7 @@ public class CommandSkillPoint extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.1"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				}
-				if (!args[1].matches("[A-Za-z0-9_-]+")) {
+				if (!args[1].matches("[A-Za-z0-9_\\-\\.]+")) {
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
@@ -88,7 +88,7 @@ public class CommandSkillPoint extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.1"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
 				}
-				if (!args[1].matches("[A-Za-z0-9_-]+")) {
+				if (!args[1].matches("[A-Za-z0-9_\\-\\.]+")) {
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
