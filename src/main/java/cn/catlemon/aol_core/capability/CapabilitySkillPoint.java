@@ -11,7 +11,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import cn.catlemon.aol_core.advancement.TriggerHandler;
 import cn.catlemon.aol_core.api.AoLEventLoader;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -109,7 +111,7 @@ public class CapabilitySkillPoint {
 		}
 		
 		@Override
-		public boolean addSPNum(String skillPointType, int skillPointNum) {
+		public boolean addSPNum(EntityPlayerMP player, String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
@@ -118,11 +120,13 @@ public class CapabilitySkillPoint {
 				return true;
 			}
 			_data.replace(skillPointType, _data.get(skillPointType) + skillPointNum);
+			if (skillPointNum != 0)
+				TriggerHandler.getSkillPointTrigger.trigger(player, skillPointType);
 			return false;
 		}
 		
 		@Override
-		public boolean subSPNum(String skillPointType, int skillPointNum) {
+		public boolean subSPNum(EntityPlayerMP player, String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);

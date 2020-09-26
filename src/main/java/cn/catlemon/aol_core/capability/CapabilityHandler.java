@@ -7,6 +7,7 @@ import cn.catlemon.aol_core.AoLCore;
 import cn.catlemon.aol_core.api.AoLEventLoader;
 import cn.catlemon.aol_core.api.SkillBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -71,7 +72,7 @@ public final class CapabilityHandler {
 	
 	@SubscribeEvent
 	public void onLearnSkill(AoLEventLoader.LearnSkillEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
+		EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
 		String skillID = event.getSkillID();
 		if (!dependenciesCheck(player, skillID) || !player.hasCapability(capSkillTree, null)
 				|| !player.hasCapability(capSkillPoint, null)) {
@@ -89,13 +90,13 @@ public final class CapabilityHandler {
 			}
 		}
 		for (Map.Entry<String, Integer> entry : spList.entrySet()) {
-			skillPoint.subSPNum(entry.getKey(), entry.getValue());
+			skillPoint.subSPNum(player, entry.getKey(), entry.getValue());
 		}
 	}
 	
 	@SubscribeEvent
 	public void onForgetSkill(AoLEventLoader.ForgetSkillEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
+		EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
 		String skillID = event.getSkillID();
 		if (!dependentsCheck(player, skillID) || !player.hasCapability(capSkillTree, null)
 				|| !player.hasCapability(capSkillPoint, null)) {
@@ -107,7 +108,7 @@ public final class CapabilityHandler {
 		SkillBase skill = skillTree.getSkill(skillID);
 		Map<String, Integer> spList = skill.getSkillPointRequirement();
 		for (Map.Entry<String, Integer> entry : spList.entrySet()) {
-			skillPoint.addSPNum(entry.getKey(), entry.getValue());
+			skillPoint.addSPNum(player, entry.getKey(), entry.getValue());
 		}
 	}
 }

@@ -73,7 +73,7 @@ public class CommandSkillPoint extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				}
 				String skillPointName = getSPTranslation(args[1]);
-				skillPoint.addSPNum(args[1].toLowerCase(), num);
+				skillPoint.addSPNum(player, args[1].toLowerCase(), num);
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.add.success",
 						skillPointName, args[2]));
 				return;
@@ -93,7 +93,7 @@ public class CommandSkillPoint extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
 				}
 				String skillPointName = getSPTranslation(args[1]);
-				if (skillPoint.subSPNum(args[1].toLowerCase(), num))
+				if (skillPoint.subSPNum(player, args[1].toLowerCase(), num))
 					sender.sendMessage(new TextComponentTranslation(
 							"command." + AoLCore.MODID + ".skillpoint.sub.success", skillPointName, args[2]));
 				else

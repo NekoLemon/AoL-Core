@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import cn.catlemon.aol_core.advancement.TriggerHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

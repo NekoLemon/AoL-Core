@@ -4,7 +4,7 @@ import java.util.Set;
 
 import cn.catlemon.aol_core.capability.ISkillTree;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -73,7 +73,7 @@ public final class AoLEventLoader {
 	public static class LearnSkillEvent extends PlayerEvent {
 		private String _skillID;
 		
-		public LearnSkillEvent(EntityPlayer player, String skillID) {
+		public LearnSkillEvent(EntityPlayerMP player, String skillID) {
 			super(player);
 			_skillID = skillID;
 		}
@@ -87,7 +87,7 @@ public final class AoLEventLoader {
 	public static class ForgetSkillEvent extends PlayerEvent {
 		private String _skillID;
 		
-		public ForgetSkillEvent(EntityPlayer player, String skillID) {
+		public ForgetSkillEvent(EntityPlayerMP player, String skillID) {
 			super(player);
 			_skillID = skillID;
 		}

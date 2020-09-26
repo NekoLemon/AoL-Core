@@ -2,6 +2,8 @@ package cn.catlemon.aol_core.capability;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+
 public interface ISkillPoint {
 	public List<String> getSPTypeList();
 	
@@ -11,7 +13,7 @@ public interface ISkillPoint {
 	
 	public int setSPNum(String skillPointType, int skillPointNum);
 	
-	public boolean addSPNum(String skillPointType, int skillPointNum);
+	public boolean addSPNum(EntityPlayerMP player, String skillPointType, int skillPointNum);
 	
-	public boolean subSPNum(String skillPointType, int skillPointNum);
+	public boolean subSPNum(EntityPlayerMP player, String skillPointType, int skillPointNum);
 }

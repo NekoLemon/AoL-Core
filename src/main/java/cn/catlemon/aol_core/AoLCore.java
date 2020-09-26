@@ -5,7 +5,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import cn.catlemon.aol_core.api.TriggerHandler;
+import cn.catlemon.aol_core.advancement.TriggerHandler;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.event.AoLEventHandler;
 import cn.catlemon.aol_core.event.CommandHandler;
