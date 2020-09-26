@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class SkillTreePage {
 	private String _skillTreePageID;
@@ -44,45 +44,45 @@ public class SkillTreePage {
 		return _skills.containsKey(skillID);
 	}
 	
-	public boolean learnSkill(EntityPlayer player, String skillID) {
+	public boolean learnSkill(EntityPlayerMP player, String skillID) {
 		if (_skills.get(skillID).isLearned())
 			return false;
 		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(player, skillID);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
-			_skills.get(skillID).learn();
+			_skills.get(skillID).learn(player);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
+	public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
 		if (!ignoreCondition)
 			return learnSkill(player, skillID);
 		if (_skills.get(skillID).isLearned())
 			return false;
-		_skills.get(skillID).learn();
+		_skills.get(skillID).learn(player);
 		return true;
 	}
 	
-	public boolean forgetSkill(EntityPlayer player, String skillID) {
+	public boolean forgetSkill(EntityPlayerMP player, String skillID) {
 		if (!_skills.get(skillID).isLearned())
 			return false;
 		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(player, skillID);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
-			_skills.get(skillID).forget();
+			_skills.get(skillID).forget(player);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
+	public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
 		if (!ignoreCondition)
 			return forgetSkill(player, skillID);
 		if (!_skills.get(skillID).isLearned())
 			return false;
-		_skills.get(skillID).forget();
+		_skills.get(skillID).forget(player);
 		return true;
 	}
 	

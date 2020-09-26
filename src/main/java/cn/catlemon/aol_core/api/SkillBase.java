@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -56,16 +57,20 @@ public abstract class SkillBase {
 		return _skillDependents;
 	}
 	
-	public void learn() {
+	public void learn(EntityPlayerMP player) {
 		_learned = true;
 		MinecraftForge.EVENT_BUS.register(this);
 		AoLEventLoader.AOL_EVENT_BUS.register(this);
+		if (player != null)
+			TriggerHandler.learnSkillTrigger.trigger(player, _skillID);
 	}
 	
-	public void forget() {
+	public void forget(EntityPlayerMP player) {
 		_learned = false;
 		MinecraftForge.EVENT_BUS.unregister(this);
 		AoLEventLoader.AOL_EVENT_BUS.unregister(this);
+		if (player != null)
+			TriggerHandler.forgetSkillTrigger.trigger(player, _skillID);
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import cn.catlemon.aol_core.api.SkillBase;
 import cn.catlemon.aol_core.api.SkillTreePage;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public interface ISkillTree {
 	public Set<String> getPageSet();
@@ -19,11 +19,11 @@ public interface ISkillTree {
 	
 	public void setSkillStat(String skillID, boolean status);
 	
-	public boolean learnSkill(EntityPlayer player, String skillID);
+	public boolean learnSkill(EntityPlayerMP player, String skillID);
 	
-	public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition);
+	public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition);
 	
-	public boolean forgetSkill(EntityPlayer player, String skillID);
+	public boolean forgetSkill(EntityPlayerMP player, String skillID);
 	
-	public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition);
+	public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition);
 }

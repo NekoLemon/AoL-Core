@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import cn.catlemon.aol_core.api.AoLEventLoader;
 import cn.catlemon.aol_core.api.SkillBase;
 import cn.catlemon.aol_core.api.SkillTreePage;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -122,15 +122,15 @@ public class CapabilitySkillTree {
 				if (page.hasSkill(skillID)) {
 					SkillBase skill = page.getSkill(skillID);
 					if (status)
-						skill.learn();
+						skill.learn(null);
 					else
-						skill.forget();
+						skill.forget(null);
 				}
 			}
 		}
 		
 		@Override
-		public boolean learnSkill(EntityPlayer player, String skillID) {
+		public boolean learnSkill(EntityPlayerMP player, String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
@@ -140,7 +140,7 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
+		public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
@@ -150,7 +150,7 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public boolean forgetSkill(EntityPlayer player, String skillID) {
+		public boolean forgetSkill(EntityPlayerMP player, String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
@@ -160,7 +160,7 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
+		public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
