@@ -1,4 +1,14 @@
 # ---------------------------------------
+# 进度部分
+# ---------------------------------------
+advancement.aol_core.test.root.title=测试
+advancement.aol_core.test.root.desc=测试进度页
+advancement.aol_core.test.first_learn.title=学习技能
+advancement.aol_core.test.first_learn.desc=学习任意技能
+advancement.aol_core.test.forget_example.title=遗忘example
+advancement.aol_core.test.forget_example.desc=遗忘技能aol_core.example
+
+# ---------------------------------------
 # GUI部分
 # ---------------------------------------
 gui.aol_core.config.title=配置文件

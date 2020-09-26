@@ -1,0 +1,24 @@
+{
+  "display": {
+    "description": {
+      "translate": "advancement.aol_core.test.first_learn.desc",
+      "color": "white"
+    },
+    "title": {
+      "translate": "advancement.aol_core.test.first_learn.title",
+      "color": "dark_green"
+    },
+    "icon": {
+      "item": "minecraft:wool",
+      "data": 4
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "criteria": {
+    "firstlearn": {
+      "trigger": "aol_core:learn_skill"
+    }
+  },
+  "parent": "aol_core:test/root"
+}

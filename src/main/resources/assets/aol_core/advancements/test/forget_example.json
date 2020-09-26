@@ -1,0 +1,27 @@
+{
+  "display": {
+    "description": {
+      "translate": "advancement.aol_core.test.forget_example.desc",
+      "color": "white"
+    },
+    "title": {
+      "translate": "advancement.aol_core.test.forget_example.title",
+      "color": "dark_green"
+    },
+    "icon": {
+      "item": "minecraft:carpet",
+      "data": 4
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "criteria": {
+    "forget": {
+      "trigger": "aol_core:forget_skill",
+      "conditions": {
+        "skill": "aol_core.example"
+      }
+    }
+  },
+  "parent": "aol_core:test/first_learn"
+}

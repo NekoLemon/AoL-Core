@@ -1,0 +1,23 @@
+{
+  "display": {
+    "description": {
+      "translate": "advancement.aol_core.test.root.desc",
+      "color": "white"
+    },
+    "title": {
+      "translate": "advancement.aol_core.test.root.title",
+      "color": "gold"
+    },
+    "icon": {
+      "item": "minecraft:golden_apple",
+      "data": 0
+    },
+    "announce_to_chat": false,
+    "background": "aol_core:textures/advancement/background/test.png"
+  },
+  "criteria": {
+    "null": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
