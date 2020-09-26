@@ -1,5 +1,7 @@
 package cn.catlemon.aol_core.command;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +57,9 @@ public class CommandSkill extends CommandBase {
 				if (args.length == 1) {
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.page.pre"));
-					for (String pageID : skillTree.getPageSet()) {
+					List<String> pageList = new ArrayList<String>(skillTree.getPageSet());
+					Collections.sort(pageList);
+					for (String pageID : pageList) {
 						sender.sendMessage(new TextComponentString(getPageTranslation(pageID)));
 					}
 					return;
@@ -68,7 +72,9 @@ public class CommandSkill extends CommandBase {
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.skill.pre",
 						getPageTranslation(args[1])));
 				SkillTreePage page = skillTree.getPage(args[1]);
-				for (String skillID : page.getSkillSet()) {
+				List<String> skillList = new ArrayList<String>(page.getSkillSet());
+				Collections.sort(skillList);
+				for (String skillID : skillList) {
 					SkillBase skill = page.getSkill(skillID);
 					sender.sendMessage(new TextComponentTranslation(
 							"command." + AoLCore.MODID + ".skill.list.skill.each", getSkillTranslation(skillID),
