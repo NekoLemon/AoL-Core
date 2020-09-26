@@ -9,6 +9,20 @@ gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的
 # ---------------------------------------
 # 命令部分
 # ---------------------------------------
+command.aol_core.skill.usage=/skill [list|learn|forget]
+command.aol_core.skill.list.page.pre=你当前的技能页如下：
+command.aol_core.skill.list.skill.fail=你没有%s
+command.aol_core.skill.list.skill.pre=%s拥有如下技能：
+command.aol_core.skill.list.skill.each=技能 %1$s %2$s
+command.aol_core.skill.list.skill.status.true=已学习
+command.aol_core.skill.list.skill.status.false=未学习
+command.aol_core.skill.learn.usage=/skill learn <技能ID> [是否强制学习]
+command.aol_core.skill.learn.success=学习技能 %1$s 成功
+command.aol_core.skill.learn.fail=学习技能 %1$s 失败
+command.aol_core.skill.forget.usage=/skill forget <技能ID> [是否强制遗忘]
+command.aol_core.skill.forget.success=遗忘技能 %1$s 成功
+command.aol_core.skill.forget.fail=遗忘技能 %1$s 失败
+
 command.aol_core.skillpoint.usage=/skillpoint [list|reset|add|sub]
 command.aol_core.skillpoint.list.fail=你尚未拥有任何技能点
 command.aol_core.skillpoint.list.pre=你的技能点数量如下：
@@ -28,3 +42,10 @@ command.aol_core.skillpoint.formaterror.2=§c技能点id只能由大小写字母
 misc.skillpoint.aol_core.normal=普通技能点
 misc.skillpoint.aol_core.special=特殊技能点
 misc.skillpoint.unknown=%s技能点（自定义）
+
+misc.skillpage.aol_core.example=示例技能页
+misc.skillpage.unknown=技能页%s（自定义）
+
+misc.skill.aol_core.example=示例技能
+misc.skill.aol_core.example2=示例技能2
+misc.skill.unknown=技能%s（自定义）
