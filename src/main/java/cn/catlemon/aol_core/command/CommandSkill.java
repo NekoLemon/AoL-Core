@@ -73,7 +73,7 @@ public class CommandSkill extends CommandBase {
 					sender.sendMessage(new TextComponentTranslation(
 							"command." + AoLCore.MODID + ".skill.list.skill.each", getSkillTranslation(skillID),
 							new TextComponentTranslation(
-									"command." + AoLCore.MODID + ".skill.list.skill.status" + skill.isLearned())
+									"command." + AoLCore.MODID + ".skill.list.skill.status." + skill.isLearned())
 											.getUnformattedText()));
 				}
 				return;
