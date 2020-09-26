@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import cn.catlemon.aol_core.api.AoLEventLoader;
 import cn.catlemon.aol_core.api.SkillBase;
 import cn.catlemon.aol_core.api.SkillTreePage;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -39,9 +40,9 @@ public class CapabilitySkillTree {
 		@Override
 		public NBTBase writeNBT(Capability<ISkillTree> capability, ISkillTree instance, EnumFacing side) {
 			NBTTagList list = new NBTTagList();
-			for (String pageID : instance.getPageList()) {
+			for (String pageID : instance.getPageSet()) {
 				SkillTreePage page = instance.getPage(pageID);
-				for (String skillID : page.getSkillList()) {
+				for (String skillID : page.getSkillSet()) {
 					SkillBase skill = page.getSkill(skillID);
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("SkillID", skill.getSkillID());
@@ -60,10 +61,34 @@ public class CapabilitySkillTree {
 		public Implementation() {
 			_pages = new HashMap<String, SkillTreePage>();
 			AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.SkillTreeInitializeEvent(this));
+			solveDependents();
+		}
+		
+		public void solveDependents() {
+			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+				SkillTreePage page = entry.getValue();
+				for (String skillID : page.getSkillSet()) {
+					SkillBase skill = page.getSkill(skillID);
+					Set<String> dependenciesList = skill.getSkillDependencies();
+					for (String dependenciesID : dependenciesList) {
+						getSkill(dependenciesID).addSkillDependents(skillID);
+					}
+				}
+			}
 		}
 		
 		@Override
-		public Set<String> getPageList() {
+		public SkillBase getSkill(String skillID) {
+			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+				SkillTreePage page = entry.getValue();
+				if (page.hasSkill(skillID))
+					return page.getSkill(skillID);
+			}
+			return null;
+		}
+		
+		@Override
+		public Set<String> getPageSet() {
 			Set<String> pageList = new HashSet<String>();
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet())
 				pageList.add(entry.getKey());
@@ -80,7 +105,6 @@ public class CapabilitySkillTree {
 			if (_pages.containsKey(page.getSkillTreePageID()))
 				return false;
 			_pages.put(page.getSkillTreePageID(), page);
-			page.parent = this;
 			return true;
 		}
 		
@@ -106,41 +130,41 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public boolean learnSkill(String skillID) {
+		public boolean learnSkill(EntityPlayer player, String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
-					return page.learnSkill(skillID);
+					return page.learnSkill(player, skillID);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean learnSkill(String skillID, boolean ignoreCondition) {
+		public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
-					return page.learnSkill(skillID, ignoreCondition);
+					return page.learnSkill(player, skillID, ignoreCondition);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean forgetSkill(String skillID) {
+		public boolean forgetSkill(EntityPlayer player, String skillID) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
-					return page.forgetSkill(skillID);
+					return page.forgetSkill(player, skillID);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean forgetSkill(String skillID, boolean ignoreCondition) {
+		public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillID))
-					return page.forgetSkill(skillID, ignoreCondition);
+					return page.forgetSkill(player, skillID, ignoreCondition);
 			}
 			return false;
 		}
@@ -171,14 +195,14 @@ public class CapabilitySkillTree {
 		@Override
 		public NBTTagCompound serializeNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
-			compound.setTag(CapabilityHandler.tagSkillTree,
+			compound.setTag(CapabilityHandler.TAKSKILLTREE,
 					storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
 			return compound;
 		}
 		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.tagSkillTree);
+			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.TAKSKILLTREE);
 			storage.readNBT(CapabilityHandler.capSkillTree, skillTree, null, list);
 		}
 		

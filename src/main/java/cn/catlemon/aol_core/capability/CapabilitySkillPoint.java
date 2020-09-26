@@ -157,14 +157,14 @@ public class CapabilitySkillPoint {
 		@Override
 		public NBTTagCompound serializeNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
-			compound.setTag(CapabilityHandler.tagSkillPoint,
+			compound.setTag(CapabilityHandler.TAGSKILLPOINT,
 					storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
 			return compound;
 		}
 		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.tagSkillPoint);
+			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.TAGSKILLPOINT);
 			storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, list);
 		}
 		

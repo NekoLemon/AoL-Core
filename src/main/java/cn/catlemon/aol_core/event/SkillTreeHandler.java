@@ -52,7 +52,7 @@ public final class SkillTreeHandler {
 				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
 				Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
 				message.compound = new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.tagSkillTree,
+				message.compound.setTag(CapabilityHandler.TAKSKILLTREE,
 						storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
 				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 			}

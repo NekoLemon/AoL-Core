@@ -35,7 +35,7 @@ public class PacketSkillTree implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSkillTree message, MessageContext mctx) {
 			if (mctx.side == Side.CLIENT) {
-				final NBTBase nbt = message.compound.getTag(CapabilityHandler.tagSkillTree);
+				final NBTBase nbt = message.compound.getTag(CapabilityHandler.TAKSKILLTREE);
 				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {

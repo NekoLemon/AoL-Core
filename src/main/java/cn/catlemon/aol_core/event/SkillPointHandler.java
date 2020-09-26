@@ -52,7 +52,7 @@ public final class SkillPointHandler {
 				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
 				Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
 				message.compound = new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.tagSkillPoint,
+				message.compound.setTag(CapabilityHandler.TAGSKILLPOINT,
 						storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
 				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 			}

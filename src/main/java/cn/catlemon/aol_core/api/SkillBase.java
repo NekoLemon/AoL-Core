@@ -10,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 public abstract class SkillBase {
+	public static final String NOTALLOWEDTOLEARN = "not_allowed_to_learn";
+	public static final String NOTALLOWEDTOFORGET = "not_allowed_to_forget";
+	
 	private boolean _learned = false;
 	protected String _skillID = null;
 	protected ResourceLocation _skillIcon = null;

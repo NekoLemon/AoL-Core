@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandSkill extends CommandBase {
-	//TODO Completely refactor NEED
+	// TODO Completely refactor NEED
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 0)
@@ -30,7 +30,7 @@ public class CommandSkill extends CommandBase {
 				if (args.length == 1) {
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.tree.pre"));
-					for (String pageID : skillTree.getPageList()) {
+					for (String pageID : skillTree.getPageSet()) {
 						sender.sendMessage(new TextComponentTranslation("misc.skilltreepage." + pageID.toLowerCase()));
 					}
 					return;
@@ -42,7 +42,7 @@ public class CommandSkill extends CommandBase {
 				}
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.skill.pre"));
 				SkillTreePage page = skillTree.getPage(args[1]);
-				for (String skillID : page.getSkillList()) {
+				for (String skillID : page.getSkillSet()) {
 					sender.sendMessage(new TextComponentTranslation("misc.skill." + skillID.toLowerCase()));
 				}
 				return;
@@ -52,7 +52,7 @@ public class CommandSkill extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skill.learn.usage");
 				}
 				if (args.length == 2) {
-					if (skillTree.learnSkill(args[1]))
+					if (skillTree.learnSkill(player, args[1]))
 						sender.sendMessage(
 								new TextComponentTranslation("command." + AoLCore.MODID + ".skill.learn.success"));
 					else
@@ -61,7 +61,7 @@ public class CommandSkill extends CommandBase {
 					return;
 				}
 				boolean ignore = CommandBase.parseBoolean(args[2]);
-				if (skillTree.learnSkill(args[1], ignore))
+				if (skillTree.learnSkill(player, args[1], ignore))
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skill.learn.success"));
 				else
@@ -73,7 +73,7 @@ public class CommandSkill extends CommandBase {
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skill.forget.usage");
 				}
 				if (args.length == 2) {
-					if (skillTree.forgetSkill(args[1]))
+					if (skillTree.forgetSkill(player, args[1]))
 						sender.sendMessage(
 								new TextComponentTranslation("command." + AoLCore.MODID + ".skill.forget.success"));
 					else
@@ -82,7 +82,7 @@ public class CommandSkill extends CommandBase {
 					return;
 				}
 				boolean ignore = CommandBase.parseBoolean(args[2]);
-				if (skillTree.forgetSkill(args[1], ignore))
+				if (skillTree.forgetSkill(player, args[1], ignore))
 					sender.sendMessage(
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skill.forget.success"));
 				else
@@ -98,20 +98,20 @@ public class CommandSkill extends CommandBase {
 			}
 		}
 	}
-
+	
 	@Override
 	public String getName() {
 		return "skill";
 	}
-
+	
 	@Override
 	public String getUsage(ICommandSender sender) {
 		return "command." + AoLCore.MODID + ".skill.usage";
 	}
-
+	
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 4;
 	}
-
+	
 }

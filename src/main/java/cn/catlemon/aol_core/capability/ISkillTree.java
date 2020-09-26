@@ -2,10 +2,14 @@ package cn.catlemon.aol_core.capability;
 
 import java.util.Set;
 
+import cn.catlemon.aol_core.api.SkillBase;
 import cn.catlemon.aol_core.api.SkillTreePage;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface ISkillTree {
-	public Set<String> getPageList();
+	public Set<String> getPageSet();
+	
+	public SkillBase getSkill(String skillID);
 	
 	public boolean addPage(SkillTreePage page);
 	
@@ -15,11 +19,11 @@ public interface ISkillTree {
 	
 	public void setSkillStat(String skillID, boolean status);
 	
-	public boolean learnSkill(String skillID);
+	public boolean learnSkill(EntityPlayer player, String skillID);
 	
-	public boolean learnSkill(String skillID, boolean ignoreCondition);
+	public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition);
 	
-	public boolean forgetSkill(String skillID);
+	public boolean forgetSkill(EntityPlayer player, String skillID);
 	
-	public boolean forgetSkill(String skillID, boolean ignoreCondition);
+	public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition);
 }

@@ -35,7 +35,7 @@ public class PacketSkillPoint implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSkillPoint message, MessageContext mctx) {
 			if (mctx.side == Side.CLIENT) {
-				final NBTBase nbt = message.compound.getTag(CapabilityHandler.tagSkillPoint);
+				final NBTBase nbt = message.compound.getTag(CapabilityHandler.TAGSKILLPOINT);
 				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {

@@ -5,13 +5,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import cn.catlemon.aol_core.capability.ISkillTree;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class SkillTreePage {
 	private String _skillTreePageID;
 	private Map<String, SkillBase> _skills;
-	
-	public ISkillTree parent = null;
 	
 	public SkillTreePage(String skillTreePageID) {
 		_skillTreePageID = skillTreePageID;
@@ -22,7 +20,7 @@ public class SkillTreePage {
 		return _skillTreePageID;
 	}
 	
-	public Set<String> getSkillList() {
+	public Set<String> getSkillSet() {
 		Set<String> skillList = new HashSet<String>();
 		for (Map.Entry<String, SkillBase> entry : _skills.entrySet())
 			skillList.add(entry.getKey());
@@ -46,11 +44,10 @@ public class SkillTreePage {
 		return _skills.containsKey(skillID);
 	}
 	
-	public boolean learnSkill(String skillID) {
+	public boolean learnSkill(EntityPlayer player, String skillID) {
 		if (_skills.get(skillID).isLearned())
 			return false;
-		// #TODO Add a listener
-		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(skillID);
+		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(player, skillID);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
 			_skills.get(skillID).learn();
@@ -59,20 +56,19 @@ public class SkillTreePage {
 		return false;
 	}
 	
-	public boolean learnSkill(String skillID, boolean ignoreCondition) {
+	public boolean learnSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
 		if (!ignoreCondition)
-			return learnSkill(skillID);
+			return learnSkill(player, skillID);
 		if (_skills.get(skillID).isLearned())
 			return false;
 		_skills.get(skillID).learn();
 		return true;
 	}
 	
-	public boolean forgetSkill(String skillID) {
+	public boolean forgetSkill(EntityPlayer player, String skillID) {
 		if (!_skills.get(skillID).isLearned())
 			return false;
-		// #TODO Add a listener
-		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(skillID);
+		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(player, skillID);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
 			_skills.get(skillID).forget();
@@ -81,9 +77,9 @@ public class SkillTreePage {
 		return false;
 	}
 	
-	public boolean forgetSkill(String skillID, boolean ignoreCondition) {
+	public boolean forgetSkill(EntityPlayer player, String skillID, boolean ignoreCondition) {
 		if (!ignoreCondition)
-			return forgetSkill(skillID);
+			return forgetSkill(player, skillID);
 		if (!_skills.get(skillID).isLearned())
 			return false;
 		_skills.get(skillID).forget();
