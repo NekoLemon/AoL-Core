@@ -6,7 +6,7 @@ import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.capability.ISkillTree;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
@@ -39,7 +39,7 @@ public class PacketSkillTree implements IMessage {
 				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
-						EntityPlayer player = Minecraft.getMinecraft().player;
+						EntityPlayerSP player = Minecraft.getMinecraft().player;
 						if (player.hasCapability(CapabilityHandler.capSkillTree, null)) {
 							ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
 							Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
