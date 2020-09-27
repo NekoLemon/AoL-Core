@@ -13,5 +13,6 @@ public final class NetworkHandler {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(AoLCore.MODID);
 		network.registerMessage(new PacketSkillPoint.Handler(), PacketSkillPoint.class, 1, Side.CLIENT);
 		network.registerMessage(new PacketSkillTree.Handler(), PacketSkillTree.class, 1, Side.CLIENT);
+		network.registerMessage(new PacketTranslate.Handler(), PacketTranslate.class, 1, Side.CLIENT);
 	}
 }

@@ -22,7 +22,6 @@ public class PacketSkillPoint implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		compound = ByteBufUtils.readTag(buf);
-		
 	}
 	
 	@Override

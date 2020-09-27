@@ -12,6 +12,8 @@ import cn.catlemon.aol_core.api.SkillBase;
 import cn.catlemon.aol_core.api.SkillTreePage;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.capability.ISkillTree;
+import cn.catlemon.aol_core.network.NetworkHandler;
+import cn.catlemon.aol_core.network.PacketTranslate;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -19,28 +21,9 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandSkill extends CommandBase {
-	
-	private String getPageTranslation(String pageID) {
-		String skillPointName = new TextComponentTranslation("misc.skillpage." + pageID.toLowerCase())
-				.getUnformattedText();
-		if (skillPointName.equals("misc.skillpage." + pageID.toLowerCase()))
-			skillPointName = new TextComponentTranslation("misc.skillpage.unknown", pageID.toLowerCase())
-					.getFormattedText();
-		return skillPointName;
-	}
-	
-	private String getSkillTranslation(String skillID) {
-		String skillPointName = new TextComponentTranslation("misc.skill." + skillID.toLowerCase())
-				.getUnformattedText();
-		if (skillPointName.equals("misc.skill." + skillID.toLowerCase()))
-			skillPointName = new TextComponentTranslation("misc.skill.unknown", skillID.toLowerCase())
-					.getFormattedText();
-		return skillPointName;
-	}
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
@@ -60,27 +43,39 @@ public class CommandSkill extends CommandBase {
 					List<String> pageList = new ArrayList<String>(skillTree.getPageSet());
 					Collections.sort(pageList);
 					for (String pageID : pageList) {
-						sender.sendMessage(new TextComponentString(getPageTranslation(pageID)));
+						NetworkHandler.network.sendTo(new PacketTranslate(new TranslateText("misc.skillpage.unknown",
+								"misc.skillpage." + pageID.toLowerCase(), pageID.toLowerCase())), player);
 					}
 					return;
 				}
 				if (!skillTree.hasPage(args[1])) {
-					sender.sendMessage(new TextComponentTranslation(
-							"command." + AoLCore.MODID + ".skill.list.skill.fail", getPageTranslation(args[1])));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(
+									new TranslateText(null, "command." + AoLCore.MODID + ".skill.list.skill.fail",
+											new TranslateText("misc.skillpage.unknown",
+													"misc.skillpage." + args[1].toLowerCase(), args[1].toLowerCase()))),
+							player);
 					return;
 				}
-				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.skill.pre",
-						getPageTranslation(args[1])));
+				NetworkHandler.network.sendTo(
+						new PacketTranslate(
+								new TranslateText("command." + AoLCore.MODID + ".skill.list.skill.pre",
+										"command." + AoLCore.MODID + ".skill.list.skill.pre",
+										new TranslateText("misc.skillpage.unknown",
+												"misc.skillpage." + args[1].toLowerCase(), args[1].toLowerCase()))),
+						player);
 				SkillTreePage page = skillTree.getPage(args[1]);
 				List<String> skillList = new ArrayList<String>(page.getSkillSet());
 				Collections.sort(skillList);
 				for (String skillID : skillList) {
 					SkillBase skill = page.getSkill(skillID);
-					sender.sendMessage(new TextComponentTranslation(
-							"command." + AoLCore.MODID + ".skill.list.skill.each", getSkillTranslation(skillID),
+					NetworkHandler.network.sendTo(new PacketTranslate(new TranslateText(null,
+							"command." + AoLCore.MODID + ".skill.list.skill.each",
+							new TranslateText("misc.skill.unknown", "misc.skill." + skillID.toLowerCase(),
+									skillID.toLowerCase()),
 							new TextComponentTranslation(
-									"command." + AoLCore.MODID + ".skill.list.skill.status." + skill.isLearned())
-											.getUnformattedText()));
+									"command." + AoLCore.MODID + ".skill.list.skill.status." + skill.isLearned()))),
+							player);
 				}
 				return;
 			}
@@ -90,20 +85,36 @@ public class CommandSkill extends CommandBase {
 				}
 				if (args.length == 2) {
 					if (skillTree.learnSkill(player, args[1]))
-						sender.sendMessage(new TextComponentTranslation(
-								"command." + AoLCore.MODID + ".skill.learn.success", getSkillTranslation(args[1])));
+						NetworkHandler.network.sendTo(
+								new PacketTranslate(
+										new TranslateText(null, "command." + AoLCore.MODID + ".skill.learn.success",
+												new TranslateText("misc.skill.unknown",
+														"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+								player);
 					else
-						sender.sendMessage(new TextComponentTranslation(
-								"command." + AoLCore.MODID + ".skill.learn.fail", getSkillTranslation(args[1])));
+						NetworkHandler.network.sendTo(
+								new PacketTranslate(
+										new TranslateText(null, "command." + AoLCore.MODID + ".skill.learn.fail",
+												new TranslateText("misc.skill.unknown",
+														"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+								player);
 					return;
 				}
 				boolean ignore = CommandBase.parseBoolean(args[2]);
 				if (skillTree.learnSkill(player, args[1], ignore))
-					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.learn.success",
-							getSkillTranslation(args[1])));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(
+									new TranslateText(null, "command." + AoLCore.MODID + ".skill.learn.success",
+											new TranslateText("misc.skill.unknown",
+													"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+							player);
 				else
-					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.learn.fail",
-							getSkillTranslation(args[1])));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(
+									new TranslateText(null, "command." + AoLCore.MODID + ".skill.learn.fail",
+											new TranslateText("misc.skill.unknown",
+													"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+							player);
 				return;
 			}
 			case "forget": {
@@ -112,20 +123,36 @@ public class CommandSkill extends CommandBase {
 				}
 				if (args.length == 2) {
 					if (skillTree.forgetSkill(player, args[1]))
-						sender.sendMessage(new TextComponentTranslation(
-								"command." + AoLCore.MODID + ".skill.forget.success", getSkillTranslation(args[1])));
+						NetworkHandler.network.sendTo(
+								new PacketTranslate(
+										new TranslateText(null, "command." + AoLCore.MODID + ".skill.forget.success",
+												new TranslateText("misc.skill.unknown",
+														"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+								player);
 					else
-						sender.sendMessage(new TextComponentTranslation(
-								"command." + AoLCore.MODID + ".skill.forget.fail", getSkillTranslation(args[1])));
+						NetworkHandler.network.sendTo(
+								new PacketTranslate(
+										new TranslateText(null, "command." + AoLCore.MODID + ".skill.forget.fail",
+												new TranslateText("misc.skill.unknown",
+														"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+								player);
 					return;
 				}
 				boolean ignore = CommandBase.parseBoolean(args[2]);
 				if (skillTree.forgetSkill(player, args[1], ignore))
-					sender.sendMessage(new TextComponentTranslation(
-							"command." + AoLCore.MODID + ".skill.forget.success", getSkillTranslation(args[1])));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(
+									new TranslateText(null, "command." + AoLCore.MODID + ".skill.forget.success",
+											new TranslateText("misc.skill.unknown",
+													"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+							player);
 				else
-					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skill.forget.fail",
-							getSkillTranslation(args[1])));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(
+									new TranslateText(null, "command." + AoLCore.MODID + ".skill.forget.fail",
+											new TranslateText("misc.skill.unknown",
+													"misc.skill." + args[1].toLowerCase(), args[1].toLowerCase()))),
+							player);
 				return;
 			}
 			case "test": {

@@ -5,6 +5,8 @@ import java.util.List;
 import cn.catlemon.aol_core.AoLCore;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.capability.ISkillPoint;
+import cn.catlemon.aol_core.network.NetworkHandler;
+import cn.catlemon.aol_core.network.PacketTranslate;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -16,14 +18,13 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandSkillPoint extends CommandBase {
 	
-	private String getSPTranslation(String skillPointTypeID) {
-		String skillPointName = new TextComponentTranslation("misc.skillpoint." + skillPointTypeID.toLowerCase())
-				.getUnformattedText();
-		if (skillPointName.equals("misc.skillpoint." + skillPointTypeID.toLowerCase()))
-			skillPointName = new TextComponentTranslation("misc.skillpoint.unknown", skillPointTypeID.toLowerCase())
-					.getFormattedText();
-		return skillPointName;
-	}
+	/*
+	 * private ITextComponent getSPTranslation(String skillPointTypeID) { return new
+	 * TextComponentTranslation(skillPointTypeID); // return
+	 * TranslateHandler.translateWithDefault("misc.skillpoint.unknown", //
+	 * "misc.skillpoint." + skillPointTypeID.toLowerCase(), //
+	 * skillPointTypeID.toLowerCase()); }
+	 */
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
@@ -45,10 +46,14 @@ public class CommandSkillPoint extends CommandBase {
 				}
 				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.pre"));
 				for (int i = 0; i < typeList.size(); i++) {
-					String skillPointName = getSPTranslation(typeList.get(i));
-					sender.sendMessage(
-							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.list.each",
-									skillPointName, skillPoint.getSPNum(typeList.get(i))));
+					NetworkHandler.network.sendTo(
+							new PacketTranslate(new TranslateText(null,
+									"command." + AoLCore.MODID + ".skillpoint.list.each",
+									new TranslateText("misc.skillpoint.unknown",
+											"misc.skillpoint." + typeList.get(i).toLowerCase(),
+											typeList.get(i).toLowerCase()),
+									skillPoint.getSPNum(typeList.get(i)))),
+							player);
 				}
 				return;
 			}
@@ -72,10 +77,13 @@ public class CommandSkillPoint extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				}
-				String skillPointName = getSPTranslation(args[1]);
-				skillPoint.addSPNum(player, args[1].toLowerCase(), num);
-				sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.add.success",
-						skillPointName, args[2]));
+				NetworkHandler.network
+						.sendTo(new PacketTranslate(
+								new TranslateText(null, "command." + AoLCore.MODID + ".skillpoint.add.success",
+										new TranslateText("misc.skillpoint.unknown",
+												"misc.skillpoint." + args[1].toLowerCase(), args[1].toLowerCase()),
+										args[2])),
+								player);
 				return;
 			}
 			case "sub": {
@@ -92,13 +100,20 @@ public class CommandSkillPoint extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.sub.usage");
 				}
-				String skillPointName = getSPTranslation(args[1]);
 				if (skillPoint.subSPNum(player, args[1].toLowerCase(), num))
-					sender.sendMessage(new TextComponentTranslation(
-							"command." + AoLCore.MODID + ".skillpoint.sub.success", skillPointName, args[2]));
+					NetworkHandler.network.sendTo(new PacketTranslate(
+							new TranslateText(null, "command." + AoLCore.MODID + ".skillpoint.sub.success",
+									new TranslateText("misc.skillpoint.unknown",
+											"misc.skillpoint." + args[1].toLowerCase(), args[1].toLowerCase()),
+									args[2])),
+							player);
 				else
-					sender.sendMessage(new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.sub.fail",
-							skillPointName, args[2]));
+					NetworkHandler.network.sendTo(new PacketTranslate(
+							new TranslateText(null, "command." + AoLCore.MODID + ".skillpoint.sub.fail",
+									new TranslateText("misc.skillpoint.unknown",
+											"misc.skillpoint." + args[1].toLowerCase(), args[1].toLowerCase()),
+									args[2])),
+							player);
 				return;
 			}
 			default: {
