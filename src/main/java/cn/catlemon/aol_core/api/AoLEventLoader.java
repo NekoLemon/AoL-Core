@@ -58,42 +58,42 @@ public final class AoLEventLoader {
 	}
 	
 	public static class SkillTreeInitializeEvent extends Event {
-		private ISkillTree _skillTree;
+		private ISkillTree skillTree;
 		
 		public SkillTreeInitializeEvent(ISkillTree skillTree) {
-			_skillTree = skillTree;
+			this.skillTree = skillTree;
 		}
 		
 		public boolean addPage(SkillTreePage page) {
-			return _skillTree.addPage(page);
+			return this.skillTree.addPage(page);
 		}
 	}
 	
 	@Cancelable
 	public static class LearnSkillEvent extends PlayerEvent {
-		private String _skillID;
+		private String skillId;
 		
-		public LearnSkillEvent(EntityPlayerMP player, String skillID) {
+		public LearnSkillEvent(EntityPlayerMP player, String skillId) {
 			super(player);
-			_skillID = skillID;
+			this.skillId = skillId;
 		}
 		
-		public final String getSkillID() {
-			return _skillID;
+		public final String getSkillId() {
+			return this.skillId;
 		}
 	}
 	
 	@Cancelable
 	public static class ForgetSkillEvent extends PlayerEvent {
-		private String _skillID;
+		private String skillId;
 		
-		public ForgetSkillEvent(EntityPlayerMP player, String skillID) {
+		public ForgetSkillEvent(EntityPlayerMP player, String skillId) {
 			super(player);
-			_skillID = skillID;
+			this.skillId = skillId;
 		}
 		
-		public final String getSkillID() {
-			return _skillID;
+		public final String getSkillId() {
+			return this.skillId;
 		}
 	}
 	

@@ -20,14 +20,14 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
 public final class ForgetSkillTrigger implements ICriterionTrigger<ForgetSkillTrigger.Instance> {
-	private static final ResourceLocation triggerID = new ResourceLocation(AoLCore.MODID, "forget_skill");
+	private static final ResourceLocation triggerId = new ResourceLocation(AoLCore.MODID, "forget_skill");
 	
 	private final Map<PlayerAdvancements, Listeners> listeners = new HashMap<PlayerAdvancements, Listeners>();
 	
 	@Nonnull
 	@Override
 	public ResourceLocation getId() {
-		return triggerID;
+		return triggerId;
 	}
 	
 	@Override
@@ -55,27 +55,27 @@ public final class ForgetSkillTrigger implements ICriterionTrigger<ForgetSkillTr
 	
 	@Override
 	public ForgetSkillTrigger.Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-		String skillID = json.has("skill") ? JsonUtils.getString(json, "skill").toLowerCase() : null;
-		return new Instance(skillID);
+		String skillId = json.has("skill") ? JsonUtils.getString(json, "skill").toLowerCase() : null;
+		return new Instance(skillId);
 	}
 	
-	public void trigger(EntityPlayerMP player, String skillID) {
+	public void trigger(EntityPlayerMP player, String skillId) {
 		Listeners playerListeners = this.listeners.get(player.getAdvancements());
 		if (playerListeners != null)
-			playerListeners.trigger(skillID);
+			playerListeners.trigger(skillId);
 	}
 	
 	static final class Instance extends AbstractCriterionInstance {
 		@Nullable
-		private String _skillID;
+		private String skillId;
 		
-		Instance(@Nullable String skillID) {
-			super(triggerID);
-			_skillID = skillID;
+		Instance(@Nullable String skillId) {
+			super(triggerId);
+			this.skillId = skillId;
 		}
 		
-		boolean test(String skillID) {
-			return (_skillID == null || _skillID.equals(skillID));
+		boolean test(String skillId) {
+			return (this.skillId == null || this.skillId.equals(skillId));
 		}
 	}
 	
@@ -99,10 +99,10 @@ public final class ForgetSkillTrigger implements ICriterionTrigger<ForgetSkillTr
 			this.listeners.remove(listener);
 		}
 		
-		public void trigger(String skillID) {
+		public void trigger(String skillId) {
 			ArrayList<Listener<Instance>> list = null;
 			for (Listener<Instance> listener : this.listeners) {
-				if (listener.getCriterionInstance().test(skillID)) {
+				if (listener.getCriterionInstance().test(skillId)) {
 					if (list == null)
 						list = new ArrayList<Listener<Instance>>();
 					

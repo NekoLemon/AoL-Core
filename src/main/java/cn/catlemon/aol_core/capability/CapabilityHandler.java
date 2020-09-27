@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public final class CapabilityHandler {
 	public final static String TAGSKILLPOINT = AoLCore.MODID + ":skillPoint";
-	public final static String TAKSKILLTREE = AoLCore.MODID + ":skillTree";
+	public final static String TAGSKILLTREE = AoLCore.MODID + ":skillTree";
 	
 	@CapabilityInject(ISkillPoint.class)
 	public static Capability<ISkillPoint> capSkillPoint;
@@ -38,33 +38,33 @@ public final class CapabilityHandler {
 		event.addDefaultSPType(defaultSPType);
 	}
 	
-	public boolean dependenciesCheck(EntityPlayer player, String skillID) {
+	public boolean dependenciesCheck(EntityPlayer player, String skillId) {
 		if (!player.hasCapability(capSkillTree, null))
 			return false;
 		ISkillTree skillTree = player.getCapability(capSkillTree, null);
-		SkillBase skill = skillTree.getSkill(skillID);
+		SkillBase skill = skillTree.getSkill(skillId);
 		if (skill == null)
 			return false;
 		Set<String> dependenciesList = skill.getSkillDependencies();
-		for (String dependenciesID : dependenciesList) {
-			if (dependenciesID.equals(SkillBase.NOTALLOWEDTOLEARN) || skillTree.getSkill(dependenciesID) == null
-					|| !skillTree.getSkill(dependenciesID).isLearned())
+		for (String dependenciesId : dependenciesList) {
+			if (dependenciesId.equals(SkillBase.NOTALLOWEDTOLEARN) || skillTree.getSkill(dependenciesId) == null
+					|| !skillTree.getSkill(dependenciesId).isLearned())
 				return false;
 		}
 		return true;
 	}
 	
-	public boolean dependentsCheck(EntityPlayer player, String skillID) {
+	public boolean dependentsCheck(EntityPlayer player, String skillId) {
 		if (!player.hasCapability(capSkillTree, null))
 			return false;
 		ISkillTree skillTree = player.getCapability(capSkillTree, null);
-		SkillBase skill = skillTree.getSkill(skillID);
+		SkillBase skill = skillTree.getSkill(skillId);
 		if (skill == null)
 			return false;
 		Set<String> dependentsList = skill.getSkillDependents();
-		for (String dependentsID : dependentsList) {
-			if (dependentsID.equals(SkillBase.NOTALLOWEDTOFORGET)
-					|| (!(skillTree.getSkill(dependentsID) == null) && skillTree.getSkill(dependentsID).isLearned()))
+		for (String dependentsId : dependentsList) {
+			if (dependentsId.equals(SkillBase.NOTALLOWEDTOFORGET)
+					|| (!(skillTree.getSkill(dependentsId) == null) && skillTree.getSkill(dependentsId).isLearned()))
 				return false;
 		}
 		return true;
@@ -73,15 +73,15 @@ public final class CapabilityHandler {
 	@SubscribeEvent
 	public void onLearnSkill(AoLEventLoader.LearnSkillEvent event) {
 		EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-		String skillID = event.getSkillID();
-		if (!dependenciesCheck(player, skillID) || !player.hasCapability(capSkillTree, null)
+		String skillId = event.getSkillId();
+		if (!dependenciesCheck(player, skillId) || !player.hasCapability(capSkillTree, null)
 				|| !player.hasCapability(capSkillPoint, null)) {
 			event.setCanceled(true);
 			return;
 		}
 		ISkillTree skillTree = player.getCapability(capSkillTree, null);
 		ISkillPoint skillPoint = player.getCapability(capSkillPoint, null);
-		SkillBase skill = skillTree.getSkill(skillID);
+		SkillBase skill = skillTree.getSkill(skillId);
 		Map<String, Integer> spList = skill.getSkillPointRequirement();
 		for (Map.Entry<String, Integer> entry : spList.entrySet()) {
 			if (skillPoint.getSPNum(entry.getKey()) < entry.getValue()) {
@@ -97,15 +97,15 @@ public final class CapabilityHandler {
 	@SubscribeEvent
 	public void onForgetSkill(AoLEventLoader.ForgetSkillEvent event) {
 		EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-		String skillID = event.getSkillID();
-		if (!dependentsCheck(player, skillID) || !player.hasCapability(capSkillTree, null)
+		String skillId = event.getSkillId();
+		if (!dependentsCheck(player, skillId) || !player.hasCapability(capSkillTree, null)
 				|| !player.hasCapability(capSkillPoint, null)) {
 			event.setCanceled(true);
 			return;
 		}
 		ISkillTree skillTree = player.getCapability(capSkillTree, null);
 		ISkillPoint skillPoint = player.getCapability(capSkillPoint, null);
-		SkillBase skill = skillTree.getSkill(skillID);
+		SkillBase skill = skillTree.getSkill(skillId);
 		Map<String, Integer> spList = skill.getSkillPointRequirement();
 		for (Map.Entry<String, Integer> entry : spList.entrySet()) {
 			skillPoint.addSPNum(player, entry.getKey(), entry.getValue());

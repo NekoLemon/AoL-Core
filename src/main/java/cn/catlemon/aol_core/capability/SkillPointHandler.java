@@ -1,9 +1,6 @@
-package cn.catlemon.aol_core.event;
+package cn.catlemon.aol_core.capability;
 
 import cn.catlemon.aol_core.AoLCore;
-import cn.catlemon.aol_core.capability.CapabilityHandler;
-import cn.catlemon.aol_core.capability.CapabilitySkillPoint;
-import cn.catlemon.aol_core.capability.ISkillPoint;
 import cn.catlemon.aol_core.network.NetworkHandler;
 import cn.catlemon.aol_core.network.PacketSkillPoint;
 import net.minecraft.entity.Entity;

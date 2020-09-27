@@ -42,9 +42,9 @@ public class CommandSkill extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skill.list.page.pre"));
 					List<String> pageList = new ArrayList<String>(skillTree.getPageSet());
 					Collections.sort(pageList);
-					for (String pageID : pageList) {
+					for (String pageId : pageList) {
 						NetworkHandler.network.sendTo(new PacketTranslate(new TranslateText("misc.skillpage.unknown",
-								"misc.skillpage." + pageID.toLowerCase(), pageID.toLowerCase())), player);
+								"misc.skillpage." + pageId.toLowerCase(), pageId.toLowerCase())), player);
 					}
 					return;
 				}
@@ -67,12 +67,12 @@ public class CommandSkill extends CommandBase {
 				SkillTreePage page = skillTree.getPage(args[1]);
 				List<String> skillList = new ArrayList<String>(page.getSkillSet());
 				Collections.sort(skillList);
-				for (String skillID : skillList) {
-					SkillBase skill = page.getSkill(skillID);
+				for (String skillId : skillList) {
+					SkillBase skill = page.getSkill(skillId);
 					NetworkHandler.network.sendTo(new PacketTranslate(new TranslateText(null,
 							"command." + AoLCore.MODID + ".skill.list.skill.each",
-							new TranslateText("misc.skill.unknown", "misc.skill." + skillID.toLowerCase(),
-									skillID.toLowerCase()),
+							new TranslateText("misc.skill.unknown", "misc.skill." + skillId.toLowerCase(),
+									skillId.toLowerCase()),
 							new TextComponentTranslation(
 									"command." + AoLCore.MODID + ".skill.list.skill.status." + skill.isLearned()))),
 							player);
@@ -207,8 +207,8 @@ public class CommandSkill extends CommandBase {
 				}
 				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
 				Set<String> skillSet = new HashSet<String>();
-				for (String pageID : skillTree.getPageSet()) {
-					SkillTreePage page = skillTree.getPage(pageID);
+				for (String pageId : skillTree.getPageSet()) {
+					SkillTreePage page = skillTree.getPage(pageId);
 					skillSet.addAll(page.getSkillSet());
 				}
 				return CommandBase.getListOfStringsMatchingLastWord(args, skillSet);

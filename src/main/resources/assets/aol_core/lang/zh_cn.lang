@@ -9,9 +9,17 @@ advancement.aol_core.test.forget_example.title=遗忘example
 advancement.aol_core.test.forget_example.desc=遗忘技能aol_core.example
 
 # ---------------------------------------
+# 按键部分
+# ---------------------------------------
+key.categories.aol_core=柠檬之旅
+
+key.aol_core.showskill=打开技能页
+
+# ---------------------------------------
 # GUI部分
 # ---------------------------------------
 gui.aol_core.config.title=配置文件
+
 gui.aol_core.config.mechanics=游戏机制
 gui.aol_core.config.mechanics.regenerationoverhaul=回血机制修改
 gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的和技能相关的血量与回血机制

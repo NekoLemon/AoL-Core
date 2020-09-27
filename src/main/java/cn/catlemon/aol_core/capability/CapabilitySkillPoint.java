@@ -58,7 +58,7 @@ public class CapabilitySkillPoint {
 	}
 	
 	public static class Implementation implements ISkillPoint {
-		private Map<String, Integer> _data = new HashMap<String, Integer>();
+		private Map<String, Integer> data = new HashMap<String, Integer>();
 		
 		private static Set<String> defaultType = new HashSet<String>();
 		
@@ -67,14 +67,14 @@ public class CapabilitySkillPoint {
 					defaultType);
 			AoLEventLoader.AOL_EVENT_BUS.post(event);
 			for (String type : defaultType)
-				_data.put(type, 0);
+				this.data.put(type, 0);
 			
 		}
 		
 		@Override
 		public List<String> getSPTypeList() {
 			List<String> list = new ArrayList<String>();
-			for (Map.Entry<String, Integer> entry : _data.entrySet()) {
+			for (Map.Entry<String, Integer> entry : this.data.entrySet()) {
 				list.add(entry.getKey());
 			}
 			Collections.sort(list);
@@ -83,30 +83,30 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public void reset() {
-			_data.clear();
+			this.data.clear();
 			for (String type : defaultType)
-				_data.put(type, 0);
+				this.data.put(type, 0);
 		}
 		
 		@Override
 		public int getSPNum(String skillPointType) {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
-			if (!_data.containsKey(skillPointType))
+			if (!this.data.containsKey(skillPointType))
 				return 0;
-			return _data.get(skillPointType);
+			return this.data.get(skillPointType);
 		}
 		
 		@Override
 		public int setSPNum(String skillPointType, int skillPointNum) {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
-			if (_data.containsKey(skillPointType)) {
-				int oldNum = _data.get(skillPointType);
-				_data.replace(skillPointType, skillPointNum);
+			if (this.data.containsKey(skillPointType)) {
+				int oldNum = this.data.get(skillPointType);
+				this.data.replace(skillPointType, skillPointNum);
 				return skillPointNum - oldNum;
 			}
-			_data.put(skillPointType, skillPointNum);
+			this.data.put(skillPointType, skillPointNum);
 			return skillPointNum;
 		}
 		
@@ -115,11 +115,11 @@ public class CapabilitySkillPoint {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
-			if (!_data.containsKey(skillPointType)) {
-				_data.put(skillPointType, skillPointNum);
+			if (!this.data.containsKey(skillPointType)) {
+				this.data.put(skillPointType, skillPointNum);
 				return true;
 			}
-			_data.replace(skillPointType, _data.get(skillPointType) + skillPointNum);
+			this.data.replace(skillPointType, this.data.get(skillPointType) + skillPointNum);
 			if (skillPointNum != 0)
 				TriggerHandler.getSkillPointTrigger.trigger(player, skillPointType);
 			return false;
@@ -130,9 +130,9 @@ public class CapabilitySkillPoint {
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			assert (skillPointNum >= 0);
-			if (!_data.containsKey(skillPointType) || _data.get(skillPointType) < skillPointNum)
+			if (!this.data.containsKey(skillPointType) || this.data.get(skillPointType) < skillPointNum)
 				return false;
-			_data.replace(skillPointType, _data.get(skillPointType) - skillPointNum);
+			this.data.replace(skillPointType, this.data.get(skillPointType) - skillPointNum);
 			return true;
 		}
 	}

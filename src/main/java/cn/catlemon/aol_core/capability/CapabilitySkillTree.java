@@ -1,7 +1,10 @@
 package cn.catlemon.aol_core.capability;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +35,7 @@ public class CapabilitySkillTree {
 			for (int i = 0; i < num; i++) {
 				NBTTagCompound compound = list.getCompoundTagAt(i);
 				if (!compound.hasNoTags())
-					instance.setSkillStat(compound.getString("SkillID"), compound.getBoolean("SkillLearned"));
+					instance.setSkillStat(compound.getString("SkillId"), compound.getBoolean("SkillLearned"));
 			}
 		}
 		
@@ -40,12 +43,12 @@ public class CapabilitySkillTree {
 		@Override
 		public NBTBase writeNBT(Capability<ISkillTree> capability, ISkillTree instance, EnumFacing side) {
 			NBTTagList list = new NBTTagList();
-			for (String pageID : instance.getPageSet()) {
-				SkillTreePage page = instance.getPage(pageID);
-				for (String skillID : page.getSkillSet()) {
-					SkillBase skill = page.getSkill(skillID);
+			for (String pageId : instance.getPageSet()) {
+				SkillTreePage page = instance.getPage(pageId);
+				for (String skillId : page.getSkillSet()) {
+					SkillBase skill = page.getSkill(skillId);
 					NBTTagCompound compound = new NBTTagCompound();
-					compound.setString("SkillID", skill.getSkillID());
+					compound.setString("SkillId", skill.getSkillId());
 					compound.setBoolean("SkillLearned", skill.isLearned());
 					list.appendTag(compound);
 				}
@@ -56,33 +59,40 @@ public class CapabilitySkillTree {
 	}
 	
 	public static class Implementation implements ISkillTree {
-		Map<String, SkillTreePage> _pages;
+		Map<String, SkillTreePage> pages = new HashMap<String, SkillTreePage>();
+		Map<Integer, SkillTreePage> guiIds = new HashMap<Integer, SkillTreePage>();
 		
 		public Implementation() {
-			_pages = new HashMap<String, SkillTreePage>();
 			AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.SkillTreeInitializeEvent(this));
 			solveDependents();
+			int id = 0;
+			List<String> pageList = new ArrayList<String>(getPageSet());
+			Collections.sort(pageList);
+			for (String pageId : pageList) {
+				this.guiIds.put(id, getPage(pageId));
+				id++;
+			}
 		}
 		
 		public void solveDependents() {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				for (String skillID : page.getSkillSet()) {
-					SkillBase skill = page.getSkill(skillID);
+				for (String skillId : page.getSkillSet()) {
+					SkillBase skill = page.getSkill(skillId);
 					Set<String> dependenciesList = skill.getSkillDependencies();
-					for (String dependenciesID : dependenciesList) {
-						getSkill(dependenciesID).addSkillDependents(skillID);
+					for (String dependenciesId : dependenciesList) {
+						getSkill(dependenciesId).addSkillDependents(skillId);
 					}
 				}
 			}
 		}
 		
 		@Override
-		public SkillBase getSkill(String skillID) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public SkillBase getSkill(String skillId) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID))
-					return page.getSkill(skillID);
+				if (page.hasSkill(skillId))
+					return page.getSkill(skillId);
 			}
 			return null;
 		}
@@ -90,37 +100,44 @@ public class CapabilitySkillTree {
 		@Override
 		public Set<String> getPageSet() {
 			Set<String> pageList = new HashSet<String>();
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet())
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet())
 				pageList.add(entry.getKey());
 			return pageList;
 		}
 		
 		@Override
-		public boolean hasPage(@Nonnull String pageID) {
-			return _pages.containsKey(pageID);
+		public boolean hasPage(@Nonnull String pageId) {
+			return this.pages.containsKey(pageId);
 		}
 		
 		@Override
 		public boolean addPage(@Nonnull SkillTreePage page) {
-			if (_pages.containsKey(page.getSkillTreePageID()))
+			if (this.pages.containsKey(page.getSkillTreePageId()))
 				return false;
-			_pages.put(page.getSkillTreePageID(), page);
+			this.pages.put(page.getSkillTreePageId(), page);
 			return true;
 		}
 		
 		@Override
-		public SkillTreePage getPage(String pageID) {
-			if (!_pages.containsKey(pageID))
+		public SkillTreePage getPage(String pageId) {
+			if (!this.pages.containsKey(pageId))
 				return null;
-			return _pages.get(pageID);
+			return this.pages.get(pageId);
 		}
 		
 		@Override
-		public void setSkillStat(String skillID, boolean status) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public SkillTreePage getPage(int guiId) {
+			if (!this.guiIds.containsKey(guiId))
+				return this.guiIds.get(0);
+			return this.guiIds.get(guiId);
+		}
+		
+		@Override
+		public void setSkillStat(String skillId, boolean status) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID)) {
-					SkillBase skill = page.getSkill(skillID);
+				if (page.hasSkill(skillId)) {
+					SkillBase skill = page.getSkill(skillId);
 					if (status)
 						skill.learn(null);
 					else
@@ -130,41 +147,41 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public boolean learnSkill(EntityPlayerMP player, String skillID) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public boolean learnSkill(EntityPlayerMP player, String skillId) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID))
-					return page.learnSkill(player, skillID);
+				if (page.hasSkill(skillId))
+					return page.learnSkill(player, skillId);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public boolean learnSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID))
-					return page.learnSkill(player, skillID, ignoreCondition);
+				if (page.hasSkill(skillId))
+					return page.learnSkill(player, skillId, ignoreCondition);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean forgetSkill(EntityPlayerMP player, String skillID) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public boolean forgetSkill(EntityPlayerMP player, String skillId) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID))
-					return page.forgetSkill(player, skillID);
+				if (page.hasSkill(skillId))
+					return page.forgetSkill(player, skillId);
 			}
 			return false;
 		}
 		
 		@Override
-		public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
-			for (Map.Entry<String, SkillTreePage> entry : _pages.entrySet()) {
+		public boolean forgetSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
+			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillID))
-					return page.forgetSkill(player, skillID, ignoreCondition);
+				if (page.hasSkill(skillId))
+					return page.forgetSkill(player, skillId, ignoreCondition);
 			}
 			return false;
 		}
@@ -195,14 +212,14 @@ public class CapabilitySkillTree {
 		@Override
 		public NBTTagCompound serializeNBT() {
 			NBTTagCompound compound = new NBTTagCompound();
-			compound.setTag(CapabilityHandler.TAKSKILLTREE,
+			compound.setTag(CapabilityHandler.TAGSKILLTREE,
 					storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
 			return compound;
 		}
 		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.TAKSKILLTREE);
+			NBTTagList list = (NBTTagList) nbt.getTag(CapabilityHandler.TAGSKILLTREE);
 			storage.readNBT(CapabilityHandler.capSkillTree, skillTree, null, list);
 		}
 		

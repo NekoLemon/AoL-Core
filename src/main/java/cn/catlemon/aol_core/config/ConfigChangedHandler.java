@@ -1,6 +1,7 @@
-package cn.catlemon.aol_core.event;
+package cn.catlemon.aol_core.config;
 
 import cn.catlemon.aol_core.AoLCore;
+import cn.catlemon.aol_core.event.AoLEventHandler;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;

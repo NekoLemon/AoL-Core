@@ -20,14 +20,14 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
 public final class GetSkillPointTrigger implements ICriterionTrigger<GetSkillPointTrigger.Instance> {
-	private static final ResourceLocation triggerID = new ResourceLocation(AoLCore.MODID, "get_skillpoint");
+	private static final ResourceLocation triggerId = new ResourceLocation(AoLCore.MODID, "get_skillpoint");
 	
 	private final Map<PlayerAdvancements, Listeners> listeners = new HashMap<PlayerAdvancements, Listeners>();
 	
 	@Nonnull
 	@Override
 	public ResourceLocation getId() {
-		return triggerID;
+		return triggerId;
 	}
 	
 	@Override
@@ -68,15 +68,15 @@ public final class GetSkillPointTrigger implements ICriterionTrigger<GetSkillPoi
 	
 	static final class Instance extends AbstractCriterionInstance {
 		@Nullable
-		private String _skillPointType;
+		private String skillPointType;
 		
 		Instance(@Nullable String skillPointType) {
-			super(triggerID);
-			_skillPointType = skillPointType;
+			super(triggerId);
+			this.skillPointType = skillPointType;
 		}
 		
 		boolean test(String skillPointType) {
-			return (_skillPointType == null || _skillPointType.equals(skillPointType));
+			return (this.skillPointType == null || this.skillPointType.equals(skillPointType));
 		}
 	}
 	

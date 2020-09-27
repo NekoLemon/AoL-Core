@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SkillExample extends SkillBase {
 	
 	public SkillExample() {
-		_skillID = AoLCore.MODID + ".example";
-		_skillPointRequirement.put(AoLCore.MODID + ".normal", 1);
+		skillId = AoLCore.MODID + ".example";
+		skillPointRequirement.put(AoLCore.MODID + ".normal", 1);
 	}
 	
 	@SubscribeEvent

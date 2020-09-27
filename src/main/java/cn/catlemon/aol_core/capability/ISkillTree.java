@@ -9,21 +9,23 @@ import net.minecraft.entity.player.EntityPlayerMP;
 public interface ISkillTree {
 	public Set<String> getPageSet();
 	
-	public SkillBase getSkill(String skillID);
+	public SkillBase getSkill(String skillId);
 	
 	public boolean addPage(SkillTreePage page);
 	
-	public boolean hasPage(String pageID);
+	public boolean hasPage(String pageId);
 	
-	public SkillTreePage getPage(String pageID);
+	public SkillTreePage getPage(int guiId);
 	
-	public void setSkillStat(String skillID, boolean status);
+	public SkillTreePage getPage(String pageId);
 	
-	public boolean learnSkill(EntityPlayerMP player, String skillID);
+	public void setSkillStat(String skillId, boolean status);
 	
-	public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition);
+	public boolean learnSkill(EntityPlayerMP player, String skillId);
 	
-	public boolean forgetSkill(EntityPlayerMP player, String skillID);
+	public boolean learnSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition);
 	
-	public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition);
+	public boolean forgetSkill(EntityPlayerMP player, String skillId);
+	
+	public boolean forgetSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition);
 }

@@ -1,7 +1,5 @@
-package cn.catlemon.aol_core.event;
+package cn.catlemon.aol_core.command;
 
-import cn.catlemon.aol_core.command.CommandSkill;
-import cn.catlemon.aol_core.command.CommandSkillPoint;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 public class CommandHandler {

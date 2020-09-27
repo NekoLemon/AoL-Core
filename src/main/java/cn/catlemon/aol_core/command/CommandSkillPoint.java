@@ -19,11 +19,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class CommandSkillPoint extends CommandBase {
 	
 	/*
-	 * private ITextComponent getSPTranslation(String skillPointTypeID) { return new
-	 * TextComponentTranslation(skillPointTypeID); // return
+	 * private ITextComponent getSPTranslation(String skillPointTypeId) { return new
+	 * TextComponentTranslation(skillPointTypeId); // return
 	 * TranslateHandler.translateWithDefault("misc.skillpoint.unknown", //
-	 * "misc.skillpoint." + skillPointTypeID.toLowerCase(), //
-	 * skillPointTypeID.toLowerCase()); }
+	 * "misc.skillpoint." + skillPointTypeId.toLowerCase(), //
+	 * skillPointTypeId.toLowerCase()); }
 	 */
 	
 	@Override

@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SkillExample2 extends SkillBase {
 	
 	public SkillExample2() {
-		_skillID = AoLCore.MODID + ".example2";
-		_skillDependencies.add(AoLCore.MODID + ".example");
+		skillId = AoLCore.MODID + ".example2";
+		skillDependencies.add(AoLCore.MODID + ".example");
 	}
 	
 	@SubscribeEvent

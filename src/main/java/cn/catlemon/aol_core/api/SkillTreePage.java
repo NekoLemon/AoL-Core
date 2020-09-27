@@ -8,81 +8,81 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class SkillTreePage {
-	private String _skillTreePageID;
-	private Map<String, SkillBase> _skills;
+	private String skillTreePageId;
+	private Map<String, SkillBase> skills;
 	
-	public SkillTreePage(String skillTreePageID) {
-		_skillTreePageID = skillTreePageID;
-		_skills = new HashMap<String, SkillBase>();
+	public SkillTreePage(String skillTreePageId) {
+		this.skillTreePageId = skillTreePageId;
+		this.skills = new HashMap<String, SkillBase>();
 	}
 	
-	public String getSkillTreePageID() {
-		return _skillTreePageID;
+	public String getSkillTreePageId() {
+		return this.skillTreePageId;
 	}
 	
 	public Set<String> getSkillSet() {
 		Set<String> skillList = new HashSet<String>();
-		for (Map.Entry<String, SkillBase> entry : _skills.entrySet())
+		for (Map.Entry<String, SkillBase> entry : this.skills.entrySet())
 			skillList.add(entry.getKey());
 		return skillList;
 	}
 	
 	public boolean addSkill(SkillBase skill) {
-		if (_skills.containsKey(skill.getSkillID()))
+		if (this.skills.containsKey(skill.getSkillId()))
 			return false;
-		_skills.put(skill.getSkillID(), skill);
+		this.skills.put(skill.getSkillId(), skill);
 		return true;
 	}
 	
-	public SkillBase getSkill(String skillID) {
-		if (!_skills.containsKey(skillID))
+	public SkillBase getSkill(String skillId) {
+		if (!this.skills.containsKey(skillId))
 			return null;
-		return _skills.get(skillID);
+		return this.skills.get(skillId);
 	}
 	
-	public boolean hasSkill(String skillID) {
-		return _skills.containsKey(skillID);
+	public boolean hasSkill(String skillId) {
+		return this.skills.containsKey(skillId);
 	}
 	
-	public boolean learnSkill(EntityPlayerMP player, String skillID) {
-		if (_skills.get(skillID).isLearned())
+	public boolean learnSkill(EntityPlayerMP player, String skillId) {
+		if (this.skills.get(skillId).isLearned())
 			return false;
-		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(player, skillID);
+		AoLEventLoader.LearnSkillEvent event = new AoLEventLoader.LearnSkillEvent(player, skillId);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
-			_skills.get(skillID).learn(player);
+			this.skills.get(skillId).learn(player);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean learnSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
+	public boolean learnSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
 		if (!ignoreCondition)
-			return learnSkill(player, skillID);
-		if (_skills.get(skillID).isLearned())
+			return learnSkill(player, skillId);
+		if (this.skills.get(skillId).isLearned())
 			return false;
-		_skills.get(skillID).learn(player);
+		this.skills.get(skillId).learn(player);
 		return true;
 	}
 	
-	public boolean forgetSkill(EntityPlayerMP player, String skillID) {
-		if (!_skills.get(skillID).isLearned())
+	public boolean forgetSkill(EntityPlayerMP player, String skillId) {
+		if (!this.skills.get(skillId).isLearned())
 			return false;
-		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(player, skillID);
+		AoLEventLoader.ForgetSkillEvent event = new AoLEventLoader.ForgetSkillEvent(player, skillId);
 		AoLEventLoader.AOL_EVENT_BUS.post(event);
 		if (!event.isCanceled()) {
-			_skills.get(skillID).forget(player);
+			this.skills.get(skillId).forget(player);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean forgetSkill(EntityPlayerMP player, String skillID, boolean ignoreCondition) {
+	public boolean forgetSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
 		if (!ignoreCondition)
-			return forgetSkill(player, skillID);
-		if (!_skills.get(skillID).isLearned())
+			return forgetSkill(player, skillId);
+		if (!this.skills.get(skillId).isLearned())
 			return false;
-		_skills.get(skillID).forget(player);
+		this.skills.get(skillId).forget(player);
 		return true;
 	}
 	

@@ -1,9 +1,6 @@
-package cn.catlemon.aol_core.event;
+package cn.catlemon.aol_core.capability;
 
 import cn.catlemon.aol_core.AoLCore;
-import cn.catlemon.aol_core.capability.CapabilityHandler;
-import cn.catlemon.aol_core.capability.CapabilitySkillTree;
-import cn.catlemon.aol_core.capability.ISkillTree;
 import cn.catlemon.aol_core.network.NetworkHandler;
 import cn.catlemon.aol_core.network.PacketSkillTree;
 import net.minecraft.entity.Entity;
@@ -52,7 +49,7 @@ public final class SkillTreeHandler {
 				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
 				Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
 				message.compound = new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.TAKSKILLTREE,
+				message.compound.setTag(CapabilityHandler.TAGSKILLTREE,
 						storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
 				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 			}

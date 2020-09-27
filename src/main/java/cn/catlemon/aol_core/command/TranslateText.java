@@ -19,19 +19,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TranslateText {
-	private String _defaultLangKey;
-	private String _key;
-	private Object[] _args;
+	private String defaultLangKey;
+	private String key;
+	private Object[] args;
 	
 	public TranslateText(@Nullable String defaultLangKey, @Nonnull String key, Object... args) {
-		_defaultLangKey = (defaultLangKey == null) ? key : defaultLangKey;
-		_key = key;
-		_args = args;
+		this.defaultLangKey = (defaultLangKey == null) ? key : defaultLangKey;
+		this.key = key;
+		this.args = args;
 	}
 	
 	public TranslateText(TextComponentTranslation text) {
-		_key = text.getKey();
-		_args = text.getFormatArgs();
+		this.key = text.getKey();
+		this.args = text.getFormatArgs();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -54,20 +54,20 @@ public class TranslateText {
 	}
 	
 	public String getDefaultLangKey() {
-		return _defaultLangKey;
+		return this.defaultLangKey;
 	}
 	
 	public String getKey() {
-		return _key;
+		return this.key;
 	}
 	
 	public Object[] getArgs() {
-		return _args;
+		return this.args;
 	}
 	
 	public String toString() {
-		return "TranslateText{default='" + _defaultLangKey + '\'' + ",key='" + _key + '\'' + ", args="
-				+ Arrays.toString(_args) + '}';
+		return "TranslateText{default='" + this.defaultLangKey + '\'' + ",key='" + this.key + '\'' + ", args="
+				+ Arrays.toString(this.args) + '}';
 	}
 	
 	public NBTTagCompound serialize() {

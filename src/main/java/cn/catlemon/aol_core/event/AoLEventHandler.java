@@ -10,7 +10,7 @@ public final class AoLEventHandler {
 		AoLEventHandler.reloadHandlers();
 	}
 	
-	private static HPOverhaulHandler _AoLHPRelatedHandler;
+	private static HPOverhaulHandler aolHPRelatedHandler;
 	
 	public static void loadUnreloadableHandlers() {
 		//
@@ -18,12 +18,12 @@ public final class AoLEventHandler {
 	
 	public static void reloadHandlers() {
 		if (AoLCoreConfig.MainConfig.mechanics.regenerationOverhaul) {
-			if (_AoLHPRelatedHandler == null) {
-				_AoLHPRelatedHandler = new HPOverhaulHandler();
+			if (aolHPRelatedHandler == null) {
+				aolHPRelatedHandler = new HPOverhaulHandler();
 			}
 		} else {
-			if (_AoLHPRelatedHandler != null) {
-				_AoLHPRelatedHandler.finalize();
+			if (aolHPRelatedHandler != null) {
+				aolHPRelatedHandler.finalize();
 			}
 		}
 	}

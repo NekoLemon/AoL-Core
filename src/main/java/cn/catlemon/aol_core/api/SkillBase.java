@@ -15,63 +15,68 @@ public abstract class SkillBase {
 	public static final String NOTALLOWEDTOLEARN = "not_allowed_to_learn";
 	public static final String NOTALLOWEDTOFORGET = "not_allowed_to_forget";
 	
-	private boolean _learned = false;
-	protected String _skillID = null;
-	protected ResourceLocation _skillIcon = null;
-	protected Vector<Integer> _skillIconCor = null;
-	protected Map<String, Integer> _skillPointRequirement = new HashMap<String, Integer>();
-	protected Set<String> _skillDependencies = new HashSet<String>();
-	private Set<String> _skillDependents = new HashSet<String>();
+	private boolean learned = false;
+	protected String skillId = null;
+	protected ResourceLocation skillIcon = null;
+	protected Vector<Integer> skillIconCor = null;
+	protected int learnLevel = 1;
+	protected Map<String, Integer> skillPointRequirement = new HashMap<String, Integer>();
+	protected Set<String> skillDependencies = new HashSet<String>();
+	private Set<String> skillDependents = new HashSet<String>();
 	
-	public String getSkillID() {
-		return _skillID;
+	public String getSkillId() {
+		return this.skillId;
 	}
 	
 	public ResourceLocation getSkillIcon() {
-		return _skillIcon;
+		return this.skillIcon;
 	}
 	
 	public Vector<Integer> getSkillIconLocation() {
-		return _skillIconCor;
+		return this.skillIconCor;
 	}
 	
 	public boolean isLearned() {
-		return _learned;
+		return this.learned;
+	}
+	
+	public int getLearnLevel() {
+		return this.learnLevel;
 	}
 	
 	public Map<String, Integer> getSkillPointRequirement() {
-		return _skillPointRequirement;
+		return this.skillPointRequirement;
 	}
 	
 	public Set<String> getSkillDependencies() {
-		return _skillDependencies;
+		return this.skillDependencies;
 	}
 	
-	public boolean addSkillDependents(String skillID) {
-		if (_skillDependents.contains(skillID))
+	public boolean addSkillDependents(String skillId) {
+		if (this.skillDependents.contains(skillId))
 			return false;
-		_skillDependents.add(skillID);
+		this.skillDependents.add(skillId);
 		return true;
 	}
 	
 	public Set<String> getSkillDependents() {
-		return _skillDependents;
+		return this.skillDependents;
 	}
 	
 	public void learn(EntityPlayerMP player) {
-		_learned = true;
+		this.learned = true;
 		MinecraftForge.EVENT_BUS.register(this);
 		AoLEventLoader.AOL_EVENT_BUS.register(this);
 		if (player != null)
-			TriggerHandler.learnSkillTrigger.trigger(player, _skillID);
+			TriggerHandler.learnSkillTrigger.trigger(player, this.skillId);
 	}
 	
 	public void forget(EntityPlayerMP player) {
-		_learned = false;
+		this.learned = false;
 		MinecraftForge.EVENT_BUS.unregister(this);
 		AoLEventLoader.AOL_EVENT_BUS.unregister(this);
 		if (player != null)
-			TriggerHandler.forgetSkillTrigger.trigger(player, _skillID);
+			TriggerHandler.forgetSkillTrigger.trigger(player, this.skillId);
 	}
 	
 }

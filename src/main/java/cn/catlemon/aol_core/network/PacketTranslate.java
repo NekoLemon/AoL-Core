@@ -16,41 +16,41 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketTranslate implements IMessage {
-	private TranslateText _text;
+	private TranslateText text;
 	
 	public PacketTranslate() {
 	}
 	
 	public PacketTranslate(TranslateText text) {
-		_text = text;
+		this.text = text;
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public ITextComponent getTextComponent() {
-		return _text.getTextComponent();
+		return this.text.getTextComponent();
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		NBTTagCompound compound = ByteBufUtils.readTag(buf);
-		_text = TranslateText.deserialize(compound);
+		this.text = TranslateText.deserialize(compound);
 		
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, _text.serialize());
+		ByteBufUtils.writeTag(buf, this.text.serialize());
 	}
 	
 	public static class Handler implements IMessageHandler<PacketTranslate, IMessage> {
 		@Nullable
 		@Override
-		public IMessage onMessage(PacketTranslate message, MessageContext mctx) {
-			if (message._text == null
-					|| (message._text.getDefaultLangKey().equals("") && message._text.getKey().equals(""))) {
+		public IMessage onMessage(PacketTranslate message, MessageContext ctx) {
+			if (message.text == null
+					|| (message.text.getDefaultLangKey().equals("") && message.text.getKey().equals(""))) {
 				return null;
 			}
-			if (mctx.side == Side.CLIENT) {
+			if (ctx.side == Side.CLIENT) {
 				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
