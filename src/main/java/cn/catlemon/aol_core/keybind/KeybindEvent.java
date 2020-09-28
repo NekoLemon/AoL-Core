@@ -20,7 +20,7 @@ public class KeybindEvent {
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (KeybindHandler.showSkill.isPressed()) {
 			Minecraft.getMinecraft().player.openGui(AoLCore.instance, GuiHandler.Gui_SKILLTREE,
-					Minecraft.getMinecraft().world, 0, -1, 0);
+					Minecraft.getMinecraft().world, 0, 1, 0);
 		}
 	}
 }

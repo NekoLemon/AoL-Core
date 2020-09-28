@@ -34,6 +34,8 @@ public class PacketSkillPoint implements IMessage {
 		public IMessage onMessage(PacketSkillPoint message, MessageContext ctx) {
 			final NBTBase nbt = message.compound.getTag(CapabilityHandler.TAGSKILLPOINT);
 			EntityPlayer player = AoLCore.proxy.getPlayer(ctx);
+			if (player == null)
+				return null;
 			if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
 				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
 				Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();

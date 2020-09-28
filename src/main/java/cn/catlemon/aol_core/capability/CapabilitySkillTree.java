@@ -66,8 +66,7 @@ public class CapabilitySkillTree {
 			AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.SkillTreeInitializeEvent(this));
 			solveDependents();
 			int id = 0;
-			List<String> pageList = new ArrayList<String>(getPageSet());
-			Collections.sort(pageList);
+			List<String> pageList = getPageList();
 			for (String pageId : pageList) {
 				this.guiIds.put(id, getPage(pageId));
 				id++;
@@ -99,9 +98,16 @@ public class CapabilitySkillTree {
 		
 		@Override
 		public Set<String> getPageSet() {
-			Set<String> pageList = new HashSet<String>();
+			Set<String> pageSet = new HashSet<String>();
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet())
-				pageList.add(entry.getKey());
+				pageSet.add(entry.getKey());
+			return pageSet;
+		}
+		
+		@Override
+		public List<String> getPageList() {
+			List<String> pageList = new ArrayList<String>(getPageSet());
+			Collections.sort(pageList);
 			return pageList;
 		}
 		

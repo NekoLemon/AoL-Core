@@ -1,5 +1,6 @@
 package cn.catlemon.aol_core.capability;
 
+import java.util.List;
 import java.util.Set;
 
 import cn.catlemon.aol_core.api.SkillBase;
@@ -8,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public interface ISkillTree {
 	public Set<String> getPageSet();
+	
+	public List<String> getPageList();
 	
 	public SkillBase getSkill(String skillId);
 	

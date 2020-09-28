@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import cn.catlemon.aol_core.advancement.TriggerHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +17,8 @@ public abstract class SkillBase {
 	private boolean learned = false;
 	protected String skillId = null;
 	protected ResourceLocation skillIcon = null;
-	protected Vector<Integer> skillIconCor = null;
+	protected Coordinate<Integer> skillIconCor = new Coordinate<Integer>(0, 0);
+	protected Coordinate<Integer> skillCor = null;
 	protected int learnLevel = 1;
 	protected Map<String, Integer> skillPointRequirement = new HashMap<String, Integer>();
 	protected Set<String> skillDependencies = new HashSet<String>();
@@ -28,11 +28,15 @@ public abstract class SkillBase {
 		return this.skillId;
 	}
 	
+	public Coordinate<Integer> getSkillLocation() {
+		return this.skillCor;
+	}
+	
 	public ResourceLocation getSkillIcon() {
 		return this.skillIcon;
 	}
 	
-	public Vector<Integer> getSkillIconLocation() {
+	public Coordinate<Integer> getSkillIconLocation() {
 		return this.skillIconCor;
 	}
 	

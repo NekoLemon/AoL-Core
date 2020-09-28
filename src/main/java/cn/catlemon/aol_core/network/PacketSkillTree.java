@@ -34,6 +34,8 @@ public class PacketSkillTree implements IMessage {
 		public IMessage onMessage(PacketSkillTree message, MessageContext ctx) {
 			final NBTBase nbt = message.compound.getTag(CapabilityHandler.TAGSKILLTREE);
 			EntityPlayer player = AoLCore.proxy.getPlayer(ctx);
+			if (player == null)
+				return null;
 			if (player.hasCapability(CapabilityHandler.capSkillTree, null)) {
 				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
 				Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
