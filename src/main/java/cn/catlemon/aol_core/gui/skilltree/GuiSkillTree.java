@@ -74,9 +74,9 @@ public class GuiSkillTree extends GuiScreen {
 	private static final PackedResourceLocation DISACTIVED_TAB = new AoLCore.AoLResourceLocation(
 			"textures/gui/skilltree.png", new Coordinate<Integer>(222, 192), 34, 24);
 	private static final PackedResourceLocation PREV_BUTTON = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(240, 224), 16, 16);
-	private static final PackedResourceLocation NEXT_BUTTON = new AoLCore.AoLResourceLocation(
 			"textures/gui/skilltree.png", new Coordinate<Integer>(224, 224), 16, 16);
+	private static final PackedResourceLocation NEXT_BUTTON = new AoLCore.AoLResourceLocation(
+			"textures/gui/skilltree.png", new Coordinate<Integer>(240, 224), 16, 16);
 	private static final PackedResourceLocation DEFAULT_SKILL_BACKGROUND = new AoLCore.AoLResourceLocation(
 			"textures/skill/background/default.png", new Coordinate<Integer>(0), 24, 24);
 	
