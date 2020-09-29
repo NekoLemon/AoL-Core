@@ -15,10 +15,9 @@ public final class NetworkHandler {
 		int id = 0;
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(AoLCore.MODID);
 		network.registerMessage(PacketSkillPoint.Handler.class, PacketSkillPoint.class, id++, Side.CLIENT);
-		network.registerMessage(PacketSkillPoint.Handler.class, PacketSkillPoint.class, id++, Side.SERVER);
 		network.registerMessage(PacketSkillTree.Handler.class, PacketSkillTree.class, id++, Side.CLIENT);
-		network.registerMessage(PacketSkillTree.Handler.class, PacketSkillTree.class, id++, Side.SERVER);
 		network.registerMessage(PacketTranslate.Handler.class, PacketTranslate.class, id++, Side.CLIENT);
+		network.registerMessage(PacketEvent.Handler.class, PacketEvent.class, id++, Side.SERVER);
 	}
 	
 	public static void sendToAll(IMessage message) {

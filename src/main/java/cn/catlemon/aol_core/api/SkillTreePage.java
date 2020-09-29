@@ -6,24 +6,25 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 
 public class SkillTreePage {
-	private String skillTreePageId;
+	private String pageId;
 	private Map<String, SkillBase> skills = new HashMap<String, SkillBase>();
-	private ResourceLocation guiBackground = null;
+	private PackedResourceLocation guiBackground = null;
+	private PackedResourceLocation pageIcon = null;
 	
-	public SkillTreePage(String skillTreePageId) {
-		this.skillTreePageId = skillTreePageId;
+	public SkillTreePage(String pageId) {
+		this.pageId = pageId;
 	}
 	
-	public SkillTreePage(String skillTreePageId, ResourceLocation guiBackground) {
-		this.skillTreePageId = skillTreePageId;
+	public SkillTreePage(String pageId, PackedResourceLocation pageIcon, PackedResourceLocation guiBackground) {
+		this.pageId = pageId;
+		this.pageIcon = pageIcon;
 		this.guiBackground = guiBackground;
 	}
 	
 	public String getSkillTreePageId() {
-		return this.skillTreePageId;
+		return this.pageId;
 	}
 	
 	public Set<String> getSkillSet() {
@@ -33,7 +34,11 @@ public class SkillTreePage {
 		return skillList;
 	}
 	
-	public ResourceLocation getGuiBackground() {
+	public PackedResourceLocation getPageIcon() {
+		return this.pageIcon;
+	}
+	
+	public PackedResourceLocation getGuiBackground() {
 		return this.guiBackground;
 	}
 	

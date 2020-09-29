@@ -19,6 +19,7 @@ public class PacketTranslate implements IMessage {
 	private TranslateText text;
 	
 	public PacketTranslate() {
+		
 	}
 	
 	public PacketTranslate(TranslateText text) {

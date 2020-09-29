@@ -6,6 +6,7 @@ import cn.catlemon.aol_core.AoLCore;
 import cn.catlemon.aol_core.capability.CapabilityHandler;
 import cn.catlemon.aol_core.capability.ISkillPoint;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketSkillPoint implements IMessage {
 	public NBTTagCompound compound;
@@ -33,13 +35,18 @@ public class PacketSkillPoint implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSkillPoint message, MessageContext ctx) {
 			final NBTBase nbt = message.compound.getTag(CapabilityHandler.TAGSKILLPOINT);
-			EntityPlayer player = AoLCore.proxy.getPlayer(ctx);
-			if (player == null)
-				return null;
-			if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
-				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
-				Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
-				storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, nbt);
+			if (ctx.side == Side.CLIENT) {
+				Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+					@Override
+					public void run() {
+						EntityPlayer player = AoLCore.proxy.getPlayer(ctx);
+						if (player != null && player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
+							ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
+							Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
+							storage.readNBT(CapabilityHandler.capSkillPoint, skillPoint, null, nbt);
+						}
+					}
+				});
 			}
 			return null;
 		}

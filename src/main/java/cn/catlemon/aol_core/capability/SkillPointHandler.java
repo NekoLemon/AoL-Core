@@ -23,7 +23,7 @@ public final class SkillPointHandler {
 	public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			ICapabilitySerializable<NBTTagCompound> providerSkillPoint = new CapabilitySkillPoint.ProviderPlayer();
-			event.addCapability(new ResourceLocation(AoLCore.MODID + ":skillpoint"), providerSkillPoint);
+			event.addCapability(new ResourceLocation(AoLCore.MODID, "skillpoint"), providerSkillPoint);
 		}
 	}
 	
@@ -44,15 +44,19 @@ public final class SkillPointHandler {
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		if (!event.player.world.isRemote) {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
-			if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
-				PacketSkillPoint message = new PacketSkillPoint();
-				ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
-				Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
-				message.compound = new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.TAGSKILLPOINT,
-						storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
-				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
-			}
+			sync(player);
+		}
+	}
+	
+	public static void sync(EntityPlayerMP player) {
+		if (player.hasCapability(CapabilityHandler.capSkillPoint, null)) {
+			PacketSkillPoint message = new PacketSkillPoint();
+			ISkillPoint skillPoint = player.getCapability(CapabilityHandler.capSkillPoint, null);
+			Capability.IStorage<ISkillPoint> storage = CapabilityHandler.capSkillPoint.getStorage();
+			message.compound = new NBTTagCompound();
+			message.compound.setTag(CapabilityHandler.TAGSKILLPOINT,
+					storage.writeNBT(CapabilityHandler.capSkillPoint, skillPoint, null));
+			NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 		}
 	}
 }

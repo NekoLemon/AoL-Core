@@ -77,6 +77,7 @@ public class CommandSkillPoint extends CommandBase {
 							new TextComponentTranslation("command." + AoLCore.MODID + ".skillpoint.formaterror.2"));
 					throw new WrongUsageException("command." + AoLCore.MODID + ".skillpoint.add.usage");
 				}
+				skillPoint.addSPNum(player, args[1].toLowerCase(), num);
 				NetworkHandler.network
 						.sendTo(new PacketTranslate(
 								new TranslateText(null, "command." + AoLCore.MODID + ".skillpoint.add.success",

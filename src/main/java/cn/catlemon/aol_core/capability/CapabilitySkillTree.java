@@ -60,17 +60,10 @@ public class CapabilitySkillTree {
 	
 	public static class Implementation implements ISkillTree {
 		Map<String, SkillTreePage> pages = new HashMap<String, SkillTreePage>();
-		Map<Integer, SkillTreePage> guiIds = new HashMap<Integer, SkillTreePage>();
 		
 		public Implementation() {
 			AoLEventLoader.AOL_EVENT_BUS.post(new AoLEventLoader.SkillTreeInitializeEvent(this));
 			solveDependents();
-			int id = 0;
-			List<String> pageList = getPageList();
-			for (String pageId : pageList) {
-				this.guiIds.put(id, getPage(pageId));
-				id++;
-			}
 		}
 		
 		public void solveDependents() {
@@ -132,14 +125,8 @@ public class CapabilitySkillTree {
 		}
 		
 		@Override
-		public SkillTreePage getPage(int guiId) {
-			if (!this.guiIds.containsKey(guiId))
-				return this.guiIds.get(0);
-			return this.guiIds.get(guiId);
-		}
-		
-		@Override
 		public void setSkillStat(String skillId, boolean status) {
+			// 不应该在这个文件以外的任何地方调用
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
 				if (page.hasSkill(skillId)) {
@@ -156,8 +143,11 @@ public class CapabilitySkillTree {
 		public boolean learnSkill(EntityPlayerMP player, String skillId) {
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillId))
-					return page.learnSkill(player, skillId);
+				if (page.hasSkill(skillId)) {
+					boolean result = page.learnSkill(player, skillId);
+					SkillTreeHandler.sync(player);
+					return result;
+				}
 			}
 			return false;
 		}
@@ -166,8 +156,11 @@ public class CapabilitySkillTree {
 		public boolean learnSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillId))
-					return page.learnSkill(player, skillId, ignoreCondition);
+				if (page.hasSkill(skillId)) {
+					boolean result = page.learnSkill(player, skillId, ignoreCondition);
+					SkillTreeHandler.sync(player);
+					return result;
+				}
 			}
 			return false;
 		}
@@ -176,8 +169,11 @@ public class CapabilitySkillTree {
 		public boolean forgetSkill(EntityPlayerMP player, String skillId) {
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillId))
-					return page.forgetSkill(player, skillId);
+				if (page.hasSkill(skillId)) {
+					boolean result = page.forgetSkill(player, skillId);
+					SkillTreeHandler.sync(player);
+					return result;
+				}
 			}
 			return false;
 		}
@@ -186,8 +182,11 @@ public class CapabilitySkillTree {
 		public boolean forgetSkill(EntityPlayerMP player, String skillId, boolean ignoreCondition) {
 			for (Map.Entry<String, SkillTreePage> entry : this.pages.entrySet()) {
 				SkillTreePage page = entry.getValue();
-				if (page.hasSkill(skillId))
-					return page.forgetSkill(player, skillId, ignoreCondition);
+				if (page.hasSkill(skillId)) {
+					boolean result = page.forgetSkill(player, skillId, ignoreCondition);
+					SkillTreeHandler.sync(player);
+					return result;
+				}
 			}
 			return false;
 		}

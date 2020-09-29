@@ -18,8 +18,6 @@ public interface ISkillTree {
 	
 	public boolean hasPage(String pageId);
 	
-	public SkillTreePage getPage(int guiId);
-	
 	public SkillTreePage getPage(String pageId);
 	
 	public void setSkillStat(String skillId, boolean status);

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SkillExample2 extends SkillBase {
 	
 	public SkillExample2() {
-		skillId = AoLCore.MODID + ".example2";
+		super(AoLCore.MODID + ".example2");
 		skillDependencies.add(AoLCore.MODID + ".example");
 		skillCor = new Coordinate<Integer>(1, 1);
 	}

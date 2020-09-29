@@ -1,12 +1,14 @@
 package cn.catlemon.aol_core.skill;
 
+import cn.catlemon.aol_core.AoLCore;
 import cn.catlemon.aol_core.api.AoLEventLoader;
 import cn.catlemon.aol_core.api.SkillTreePage;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AoLSkillPageHandler {
-	public static SkillTreePage pageExample = new SkillTreePage("aol_core.example");
+	public static SkillTreePage pageExample = new SkillTreePage("aol_core.example",
+			new AoLCore.AoLResourceLocation("textures/skill/example.png"), null);
 	public static SkillTreePage pageExample2 = new SkillTreePage("aol_core.example2");
 	public static SkillTreePage pageExample3 = new SkillTreePage("aol_core.example3");
 	public static SkillTreePage pageExample4 = new SkillTreePage("aol_core.example4");

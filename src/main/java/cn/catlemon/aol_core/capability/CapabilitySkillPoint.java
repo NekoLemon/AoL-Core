@@ -99,6 +99,7 @@ public class CapabilitySkillPoint {
 		
 		@Override
 		public int setSPNum(String skillPointType, int skillPointNum) {
+			// 不应该在这个文件以外的任何地方调用
 			assert (skillPointType.matches("[A-Za-z0-9_\\-\\.]+"));
 			skillPointType = skillPointType.toLowerCase();
 			if (this.data.containsKey(skillPointType)) {
@@ -117,11 +118,13 @@ public class CapabilitySkillPoint {
 			assert (skillPointNum >= 0);
 			if (!this.data.containsKey(skillPointType)) {
 				this.data.put(skillPointType, skillPointNum);
+				SkillPointHandler.sync(player);
 				return true;
 			}
 			this.data.replace(skillPointType, this.data.get(skillPointType) + skillPointNum);
 			if (skillPointNum != 0)
 				TriggerHandler.getSkillPointTrigger.trigger(player, skillPointType);
+			SkillPointHandler.sync(player);
 			return false;
 		}
 		
@@ -133,6 +136,7 @@ public class CapabilitySkillPoint {
 			if (!this.data.containsKey(skillPointType) || this.data.get(skillPointType) < skillPointNum)
 				return false;
 			this.data.replace(skillPointType, this.data.get(skillPointType) - skillPointNum);
+			SkillPointHandler.sync(player);
 			return true;
 		}
 	}

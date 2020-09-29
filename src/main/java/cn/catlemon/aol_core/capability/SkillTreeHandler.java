@@ -23,7 +23,7 @@ public final class SkillTreeHandler {
 	public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			ICapabilitySerializable<NBTTagCompound> providerSkillTree = new CapabilitySkillTree.ProviderPlayer();
-			event.addCapability(new ResourceLocation(AoLCore.MODID + ":skilltree"), providerSkillTree);
+			event.addCapability(new ResourceLocation(AoLCore.MODID, "skilltree"), providerSkillTree);
 		}
 	}
 	
@@ -44,15 +44,19 @@ public final class SkillTreeHandler {
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		if (!event.player.world.isRemote) {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
-			if (player.hasCapability(CapabilityHandler.capSkillTree, null)) {
-				PacketSkillTree message = new PacketSkillTree();
-				ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
-				Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
-				message.compound = new NBTTagCompound();
-				message.compound.setTag(CapabilityHandler.TAGSKILLTREE,
-						storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
-				NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
-			}
+			sync(player);
+		}
+	}
+	
+	public static void sync(EntityPlayerMP player) {
+		if (player.hasCapability(CapabilityHandler.capSkillTree, null)) {
+			PacketSkillTree message = new PacketSkillTree();
+			ISkillTree skillTree = player.getCapability(CapabilityHandler.capSkillTree, null);
+			Capability.IStorage<ISkillTree> storage = CapabilityHandler.capSkillTree.getStorage();
+			message.compound = new NBTTagCompound();
+			message.compound.setTag(CapabilityHandler.TAGSKILLTREE,
+					storage.writeNBT(CapabilityHandler.capSkillTree, skillTree, null));
+			NetworkHandler.network.sendTo(message, (EntityPlayerMP) player);
 		}
 	}
 }

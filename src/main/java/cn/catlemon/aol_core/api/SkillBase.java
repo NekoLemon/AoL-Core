@@ -5,9 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import cn.catlemon.aol_core.advancement.TriggerHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 public abstract class SkillBase {
@@ -15,14 +16,18 @@ public abstract class SkillBase {
 	public static final String NOTALLOWEDTOFORGET = "not_allowed_to_forget";
 	
 	private boolean learned = false;
-	protected String skillId = null;
-	protected ResourceLocation skillIcon = null;
-	protected Coordinate<Integer> skillIconCor = new Coordinate<Integer>(0, 0);
+	private String skillId = null;
+	protected PackedResourceLocation skillIcon = null;
+	protected PackedResourceLocation skillBackground = null;
 	protected Coordinate<Integer> skillCor = null;
 	protected int learnLevel = 1;
 	protected Map<String, Integer> skillPointRequirement = new HashMap<String, Integer>();
 	protected Set<String> skillDependencies = new HashSet<String>();
 	private Set<String> skillDependents = new HashSet<String>();
+	
+	public SkillBase(@Nonnull String skillId) {
+		this.skillId = skillId;
+	}
 	
 	public String getSkillId() {
 		return this.skillId;
@@ -32,12 +37,12 @@ public abstract class SkillBase {
 		return this.skillCor;
 	}
 	
-	public ResourceLocation getSkillIcon() {
+	public PackedResourceLocation getSkillIcon() {
 		return this.skillIcon;
 	}
 	
-	public Coordinate<Integer> getSkillIconLocation() {
-		return this.skillIconCor;
+	public PackedResourceLocation getSkillBackground() {
+		return this.skillBackground;
 	}
 	
 	public boolean isLearned() {

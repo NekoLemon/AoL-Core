@@ -24,6 +24,8 @@ gui.aol_core.config.mechanics=游戏机制
 gui.aol_core.config.mechanics.regenerationoverhaul=回血机制修改
 gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的和技能相关的血量与回血机制
 
+gui.aol_core.skilltree.learnbutton=学习
+
 # ---------------------------------------
 # 命令部分
 # ---------------------------------------
@@ -64,6 +66,7 @@ misc.skillpoint.unknown=%s技能点（自定义）
 misc.skillpage.aol_core.example=示例技能页
 misc.skillpage.unknown=技能页%s（自定义）
 
-misc.skill.aol_core.example=示例技能
+misc.skill.aol_core.example=示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能示例技能
+misc.skill.aol_core.example.desc=测试测试测试测试\n测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
 misc.skill.aol_core.example2=示例技能2
 misc.skill.unknown=技能%s（自定义）
