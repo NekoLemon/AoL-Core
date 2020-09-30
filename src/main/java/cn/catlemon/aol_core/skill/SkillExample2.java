@@ -11,6 +11,8 @@ public class SkillExample2 extends SkillBase {
 	
 	public SkillExample2() {
 		super(AoLCore.MODID + ".example2");
+		skillPointRequirement.put(AoLCore.MODID + ".normal", 1);
+		skillPointRequirement.put(AoLCore.MODID + ".special", 1);
 		skillDependencies.add(AoLCore.MODID + ".example");
 		skillCor = new Coordinate<Integer>(1, 1);
 	}

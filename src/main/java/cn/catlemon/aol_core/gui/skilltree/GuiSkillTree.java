@@ -30,25 +30,24 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
-//TODO 全部换成自定义大小的材质
 public class GuiSkillTree extends GuiScreen {
 	private EntityPlayer player;
 	private SkillTreePage page;
 	private List<String> pages;
 	private int learnLevel;
 	
-	private static final int GUI_WIDTH = 256;
-	private static final int GUI_HEIGHT = 160;
+	private static final int GUI_WIDTH = 432;
+	private static final int GUI_HEIGHT = 192;
 	private int guiLeft, guiTop;
 	
-	private static final int SKILL_SCREEN_WIDTH = 132;
-	private static final int SKILL_SCREEN_HEIGHT = 140;
-	private static final int SKILL_SCREEN_OFFSET_X = 82;
+	private static final int SKILL_SCREEN_WIDTH = 196;
+	private static final int SKILL_SCREEN_HEIGHT = 172;
+	private static final int SKILL_SCREEN_OFFSET_X = 194;
 	private static final int SKILL_SCREEN_OFFSET_Y = 10;
 	private int skillScreenLeft, skillScreenTop;
 	
-	private static final int DESC_SCREEN_WIDTH = 60;
-	private static final int DESC_SCREEN_HEIGHT = 108;
+	private static final int DESC_SCREEN_WIDTH = 172;
+	private static final int DESC_SCREEN_HEIGHT = 148;
 	private static final int DESC_SCREEN_OFFSET_X = 10;
 	private static final int DESC_SCREEN_OFFSET_Y = 10;
 	private int descScreenLeft, descScreenTop;
@@ -62,23 +61,25 @@ public class GuiSkillTree extends GuiScreen {
 	private int currentTab, currentPage, totalPages;
 	
 	private PackedResourceLocation BACKGROUND = new AoLCore.AoLResourceLocation("textures/gui/skilltree_background.png",
-			new Coordinate<Integer>(0), 192, 192);
+			new Coordinate<Integer>(0), 256, 256);
 	private static final PackedResourceLocation WINDOW = new AoLCore.AoLResourceLocation("textures/gui/skilltree.png",
-			new Coordinate<Integer>(0), 256, 160);
+			new Coordinate<Integer>(0), 400, 192, 400, 256);
 	private static final PackedResourceLocation ENABLED_LEARN_BUTTON = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(0, 160), 48, 24);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(0, 192), 48, 20, 400, 256);
 	private static final PackedResourceLocation DISABLED_LEARN_BUTTON = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(0, 192), 48, 24);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(0, 212), 48, 20, 400, 256);
 	private static final PackedResourceLocation ACTIVED_TAB = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(222, 160), 34, 24);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(48, 192), 34, 24, 400, 256);
 	private static final PackedResourceLocation DISACTIVED_TAB = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(222, 192), 34, 24);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(48, 216), 34, 24, 400, 256);
 	private static final PackedResourceLocation PREV_BUTTON = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(224, 224), 16, 16);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(50, 240), 16, 16, 400, 256);
 	private static final PackedResourceLocation NEXT_BUTTON = new AoLCore.AoLResourceLocation(
-			"textures/gui/skilltree.png", new Coordinate<Integer>(240, 224), 16, 16);
+			"textures/gui/skilltree.png", new Coordinate<Integer>(66, 240), 16, 16, 400, 256);
 	private static final PackedResourceLocation DEFAULT_SKILL_BACKGROUND = new AoLCore.AoLResourceLocation(
 			"textures/skill/background/default.png", new Coordinate<Integer>(0), 24, 24);
+	
+	private static final int TABS_IN_ONE_PAGE = 7;
 	
 	private boolean buttonPagePrevEnabled, buttonPageNextEnabled, buttonLearnEnabled;
 	
@@ -95,10 +96,10 @@ public class GuiSkillTree extends GuiScreen {
 		this.player = player;
 		this.pages = player.getCapability(CapabilityHandler.capSkillTree, null).getPageList();
 		this.page = player.getCapability(CapabilityHandler.capSkillTree, null).getPage(pages.get(pageGuiId));
-		totalPages = (pages.size() + 4) / 5;
+		totalPages = (pages.size() + TABS_IN_ONE_PAGE - 1) / TABS_IN_ONE_PAGE;
 		int pageIndex = pages.indexOf(page.getSkillTreePageId());
-		currentTab = pageIndex % 5;
-		currentPage = pageIndex / 5;
+		currentTab = pageIndex % TABS_IN_ONE_PAGE;
+		currentPage = pageIndex / TABS_IN_ONE_PAGE;
 		this.learnLevel = learnLevel;
 		if (page.getGuiBackground() != null)
 			BACKGROUND = page.getGuiBackground();
@@ -189,8 +190,13 @@ public class GuiSkillTree extends GuiScreen {
 			@Nonnull Coordinate<Integer> offset, int width, int height) {
 		setDefaultRenderSettings();
 		mc.getTextureManager().bindTexture(prLocation.resourceLocation);
-		drawTexturedModalRect(drawLocation.x, drawLocation.y, prLocation.offset.x + offset.x,
-				prLocation.offset.y + offset.y, width, height);
+		if (prLocation.customSized) {
+			drawModalRectWithCustomSizedTexture(drawLocation.x, drawLocation.y, prLocation.offset.x + offset.x,
+					prLocation.offset.y + offset.y, width, height, prLocation.canvasWidth, prLocation.canvasHeight);
+		} else {
+			drawTexturedModalRect(drawLocation.x, drawLocation.y, prLocation.offset.x + offset.x,
+					prLocation.offset.y + offset.y, width, height);
+		}
 	}
 	
 	private void drawBackground() {
@@ -320,7 +326,7 @@ public class GuiSkillTree extends GuiScreen {
 			drawSizeX = (drawSizeX >= (16 + sizeX) / 2) ? 16 : drawSizeX - (sizeX - 16) / 2;
 			drawSizeY = (drawSizeY >= (16 + sizeY) / 2) ? 16 : drawSizeY - (sizeY - 16) / 2;
 			// 绘制16x16技能图标
-			if (skill.getSkillIcon() != null) {
+			if (drawSizeX > 0 && drawSizeY > 0 && skill.getSkillIcon() != null) {
 				draw(skill.getSkillIcon(), new Coordinate<Integer>(iconStartX, iconStartY),
 						new Coordinate<Integer>(offsetX, offsetY), drawSizeX, drawSizeY);
 			}
@@ -382,36 +388,47 @@ public class GuiSkillTree extends GuiScreen {
 	private void drawLearnButton() {
 		zLevel += 20;
 		draw(buttonLearnEnabled ? ENABLED_LEARN_BUTTON : DISABLED_LEARN_BUTTON,
-				new Coordinate<Integer>(guiLeft + 16, guiTop + 128));
+				new Coordinate<Integer>(
+						guiLeft + DESC_SCREEN_OFFSET_X + DESC_SCREEN_WIDTH / 2 - ENABLED_LEARN_BUTTON.width / 2,
+						guiTop + (GUI_HEIGHT + DESC_SCREEN_OFFSET_Y + DESC_SCREEN_HEIGHT + 2) / 2
+								- ENABLED_LEARN_BUTTON.height / 2));
 		String buttonText = I18n.format("gui." + AoLCore.MODID + ".skilltree.learnbutton");
+		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 25);
 		fontRenderer.drawString((buttonLearnEnabled ? "§f" : "§7") + buttonText,
-				guiLeft + 16 + (ENABLED_LEARN_BUTTON.width - fontRenderer.getStringWidth(buttonText)) / 2,
-				guiTop + 128 + (ENABLED_LEARN_BUTTON.height - 8) / 2, 0xffffff, false);
-		GlStateManager.translate(0, 0, -25);
+				guiLeft + DESC_SCREEN_OFFSET_X + DESC_SCREEN_WIDTH / 2 - ENABLED_LEARN_BUTTON.width / 2
+						+ (ENABLED_LEARN_BUTTON.width - fontRenderer.getStringWidth(buttonText)) / 2,
+				guiTop + (GUI_HEIGHT + DESC_SCREEN_OFFSET_Y + DESC_SCREEN_HEIGHT + 2) / 2
+						- ENABLED_LEARN_BUTTON.height / 2 + (ENABLED_LEARN_BUTTON.height - 8) / 2,
+				0xffffff, false);
+		GlStateManager.popMatrix();
 		zLevel -= 20;
 	}
 	
 	private void drawTab() {
 		zLevel += 20;
-		int tabNums = (currentPage == totalPages - 1) ? pages.size() % 5 : 5;
-		boolean thisPageContainsActiveOne = (pages.indexOf(page.getSkillTreePageId()) / 5 == currentPage);
+		int tabNums = (currentPage == totalPages - 1) ? pages.size() % TABS_IN_ONE_PAGE : TABS_IN_ONE_PAGE;
+		boolean thisPageContainsActiveOne = (pages.indexOf(page.getSkillTreePageId())
+				/ TABS_IN_ONE_PAGE == currentPage);
 		for (int tab = 0; tab < tabNums; tab++) {
 			draw((thisPageContainsActiveOne && tab == currentTab) ? ACTIVED_TAB : DISACTIVED_TAB,
-					new Coordinate<Integer>(guiLeft + 222, guiTop + 24 * tab + 8));
+					new Coordinate<Integer>(guiLeft + WINDOW.width - 2, guiTop + 24 * tab + 8));
 			zLevel += 10;
 			SkillTreePage currentDrawingPage = player.getCapability(CapabilityHandler.capSkillTree, null)
 					.getPage(pages.get(5 * currentPage + tab));
 			PackedResourceLocation pageIcon = currentDrawingPage.getPageIcon();
 			if (pageIcon != null)
-				draw(pageIcon, new Coordinate<Integer>(guiLeft + 232, guiTop + 24 * tab + 12), 16, 16);
+				draw(pageIcon, new Coordinate<Integer>(guiLeft + WINDOW.width - 2 + 10, guiTop + 24 * tab + 12), 16,
+						16);
 			zLevel -= 10;
 		}
 		if (buttonPagePrevEnabled) {
-			draw(PREV_BUTTON, new Coordinate<Integer>(guiLeft + 224, guiTop + 144));
+			draw(PREV_BUTTON,
+					new Coordinate<Integer>(guiLeft + WINDOW.width, guiTop + WINDOW.height - PREV_BUTTON.height));
 		}
 		if (buttonPageNextEnabled) {
-			draw(NEXT_BUTTON, new Coordinate<Integer>(guiLeft + 240, guiTop + 144));
+			draw(NEXT_BUTTON, new Coordinate<Integer>(guiLeft + WINDOW.width + PREV_BUTTON.width,
+					guiTop + WINDOW.height - NEXT_BUTTON.height));
 		}
 		zLevel -= 20;
 	}
@@ -419,43 +436,100 @@ public class GuiSkillTree extends GuiScreen {
 	private void drawText() {
 		if (currentSelectedSkill == null)
 			return;
+		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 25);
 		String title = I18n.format("misc.skill." + currentSelectedSkill.getSkillId());
+		int currentHeight = descScreenTop + 2;
+		title = "§r" + I18n.format("gui." + AoLCore.MODID + ".skilltree.title.foramt")
+				+ fontRenderer.trimStringToWidth(title, DESC_SCREEN_WIDTH - 4, true);
+		fontRenderer.drawStringWithShadow(title, descScreenLeft + 2, currentHeight, 0xffffff);
+		currentHeight += 12;
 		String desc = I18n.format("misc.skill." + currentSelectedSkill.getSkillId() + ".desc");
-		title = fontRenderer.trimStringToWidth(title, 2 * DESC_SCREEN_WIDTH - 10);
-		fontRenderer.drawSplitString(title, descScreenLeft + 2, descScreenTop + 2, DESC_SCREEN_WIDTH - 4, 0xffffff);
-		GlStateManager.translate(0, 0, -25);
+		if (!desc.equals("misc.skill." + currentSelectedSkill.getSkillId() + ".desc")) {
+			desc = "§r" + I18n.format("gui." + AoLCore.MODID + ".skilltree.desc.foramt")
+					+ fontRenderer.trimStringToWidth(desc, 6 * DESC_SCREEN_WIDTH - 60, true);
+			fontRenderer.drawSplitString(desc, descScreenLeft + 2, currentHeight, DESC_SCREEN_WIDTH - 4, 0xffffff);
+		}
+		currentHeight += 60;
+		Map<String, Integer> spRequirement = currentSelectedSkill.getSkillPointRequirement();
+		if (spRequirement.size() > 0) {
+			String spPre = I18n.format("gui." + AoLCore.MODID + ".skilltree.sp.pre");
+			fontRenderer.drawString(spPre, descScreenLeft + 2, currentHeight, 0xffffff);
+			currentHeight += 10;
+			ISkillPoint sp = player.getCapability(CapabilityHandler.capSkillPoint, null);
+			for (Map.Entry<String, Integer> entry : spRequirement.entrySet()) {
+				String spFormat = (sp.getSPNum(entry.getKey()) >= entry.getValue()) ? "§2" : "§4";
+				String spName = I18n.format("misc.skillpoint." + entry.getKey().toLowerCase());
+				if (spName.equals("misc.skillpoint." + entry.getKey().toLowerCase()))
+					spName = I18n.format("misc.skillpoint.unknown", entry.getKey());
+				String spEach = "    " + I18n.format("gui." + AoLCore.MODID + ".skilltree.sp.each", spName,
+						entry.getValue(), sp.getSPNum(entry.getKey()));
+				spEach = spFormat + fontRenderer.trimStringToWidth(spEach, DESC_SCREEN_WIDTH - 4);
+				fontRenderer.drawString(spEach, descScreenLeft + 2, currentHeight, 0xffffff);
+				currentHeight += 9;
+			}
+		}
+		Set<String> dependencies = currentSelectedSkill.getSkillDependencies();
+		if (dependencies.size() > 0) {
+			String skPre = I18n.format("gui." + AoLCore.MODID + ".skilltree.sk.pre");
+			fontRenderer.drawString(skPre, descScreenLeft + 2, currentHeight, 0xffffff);
+			currentHeight += 10;
+			ISkillTree tree = player.getCapability(CapabilityHandler.capSkillTree, null);
+			for (String dependency : dependencies) {
+				String skFormat = (tree.getSkill(dependency).isLearned()) ? "§2" : "§4";
+				String skName = I18n.format("misc.skill." + dependency);
+				if (skName.equals("misc.skillpoint." + dependency))
+					skName = I18n.format("misc.skill.unknown", dependency);
+				String skSuffix = (tree.getSkill(dependency).isLearned())
+						? I18n.format("gui." + AoLCore.MODID + ".skilltree.sk.learned")
+						: I18n.format("gui." + AoLCore.MODID + ".skilltree.sk.unlearned");
+				String skEach = "    " + skName + skSuffix;
+				skEach = skFormat + fontRenderer.trimStringToWidth(skEach, DESC_SCREEN_WIDTH - 4);
+				fontRenderer.drawString(skEach, descScreenLeft + 2, currentHeight, 0xffffff);
+				currentHeight += 9;
+			}
+		}
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if (mouseButton == 0) {
-			if (buttonPagePrevEnabled && mouseX >= guiLeft + 224 && mouseX < guiLeft + 240 && mouseY >= guiTop + 144
-					&& mouseY < guiTop + 160) {
+			if (buttonPagePrevEnabled && mouseX >= guiLeft + WINDOW.width
+					&& mouseX < guiLeft + WINDOW.width + PREV_BUTTON.width
+					&& mouseY >= guiTop + WINDOW.height - PREV_BUTTON.height && mouseY < guiTop + WINDOW.height) {
 				currentPage--;
 			}
-			if (buttonPageNextEnabled && mouseX >= guiLeft + 240 && mouseX < guiLeft + 256 && mouseY >= guiTop + 144
-					&& mouseY < guiTop + 160) {
+			if (buttonPageNextEnabled && mouseX >= guiLeft + WINDOW.width + PREV_BUTTON.width
+					&& mouseX < guiLeft + WINDOW.width + PREV_BUTTON.width + NEXT_BUTTON.width
+					&& mouseY >= guiTop + WINDOW.height - NEXT_BUTTON.height && mouseY < guiTop + WINDOW.height) {
 				currentPage++;
 			}
-			if (buttonLearnEnabled && mouseX >= guiLeft + 16 && mouseX < guiLeft + 64 && mouseY >= guiTop + 128
-					&& mouseY < guiTop + 152) {
+			if (buttonLearnEnabled
+					&& mouseX >= guiLeft + DESC_SCREEN_OFFSET_X + DESC_SCREEN_WIDTH / 2 - ENABLED_LEARN_BUTTON.width / 2
+					&& mouseX < guiLeft + DESC_SCREEN_OFFSET_X + DESC_SCREEN_WIDTH / 2 - ENABLED_LEARN_BUTTON.width / 2
+							+ ENABLED_LEARN_BUTTON.width
+					&& mouseY >= guiTop + (GUI_HEIGHT + DESC_SCREEN_OFFSET_Y + DESC_SCREEN_HEIGHT + 2) / 2
+							- ENABLED_LEARN_BUTTON.height / 2
+					&& mouseY < guiTop + (GUI_HEIGHT + DESC_SCREEN_OFFSET_Y + DESC_SCREEN_HEIGHT + 2) / 2
+							- ENABLED_LEARN_BUTTON.height / 2 + ENABLED_LEARN_BUTTON.height) {
 				if (currentSelectedSkill != null) {
 					sync_learn(currentSelectedSkill.getSkillId());
 					buttonLearnEnabled = false;
 				}
 			}
-			int tabNums = (currentPage == totalPages - 1) ? pages.size() % 5 : 5;
-			boolean thisPageContainsActiveOne = (pages.indexOf(page.getSkillTreePageId()) / 5 == currentPage);
+			int tabNums = (currentPage == totalPages - 1) ? pages.size() % TABS_IN_ONE_PAGE : TABS_IN_ONE_PAGE;
+			boolean thisPageContainsActiveOne = (pages.indexOf(page.getSkillTreePageId())
+					/ TABS_IN_ONE_PAGE == currentPage);
 			for (int tab = 0; tab < tabNums; tab++) {
 				if (thisPageContainsActiveOne && tab == currentTab) {
 					continue;
 				} else {
-					if (mouseX >= guiLeft + 224 && mouseX < guiLeft + 256 && mouseY >= guiTop + 24 * tab + 8
+					if (mouseX >= guiLeft + WINDOW.width && mouseX < GUI_WIDTH && mouseY >= guiTop + 24 * tab + 8
 							&& mouseY < guiTop + 24 * tab + 32) {
-						player.openGui(AoLCore.instance, GuiHandler.Gui_SKILLTREE, player.world, currentPage * 5 + tab,
-								1, 0);
+						player.openGui(AoLCore.instance, GuiHandler.Gui_SKILLTREE, player.world,
+								currentPage * TABS_IN_ONE_PAGE + tab, 1, 0);
 					}
 				}
 			}

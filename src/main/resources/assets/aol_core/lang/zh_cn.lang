@@ -25,6 +25,13 @@ gui.aol_core.config.mechanics.regenerationoverhaul=回血机制修改
 gui.aol_core.config.mechanics.regenerationoverhaul.tooltip=使用AoL自定义的和技能相关的血量与回血机制
 
 gui.aol_core.skilltree.learnbutton=学习
+gui.aol_core.skilltree.title.foramt=§l§6
+gui.aol_core.skilltree.desc.foramt=§f
+gui.aol_core.skilltree.sp.pre=§f技能点需求：
+gui.aol_core.skilltree.sp.each=%1$s：%2$d（当前%3$d）
+gui.aol_core.skilltree.sk.pre=§f前置技能：
+gui.aol_core.skilltree.sk.learned=（已学习）
+gui.aol_core.skilltree.sk.unlearned=（未学习）
 
 # ---------------------------------------
 # 命令部分

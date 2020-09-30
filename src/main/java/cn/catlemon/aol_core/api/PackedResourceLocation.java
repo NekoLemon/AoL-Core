@@ -14,6 +14,12 @@ public abstract class PackedResourceLocation {
 	
 	public Integer height = null;
 	
+	public Integer canvasWidth = null;
+	
+	public Integer canvasHeight = null;
+	
+	public boolean customSized = false;
+	
 	public PackedResourceLocation(String ModId, String location) {
 		AoLCore.LOGGER.fatal(ModId);
 		this.resourceLocation = new ResourceLocation(ModId, location);
@@ -30,5 +36,17 @@ public abstract class PackedResourceLocation {
 		this.offset = offset;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public PackedResourceLocation(String ModId, String location, @Nonnull Coordinate<Integer> offset,
+			@Nonnull Integer width, @Nonnull Integer height, @Nonnull Integer canvasWidth,
+			@Nonnull Integer canvasHeight) {
+		this.resourceLocation = new ResourceLocation(ModId, location);
+		this.offset = offset;
+		this.width = width;
+		this.height = height;
+		this.canvasWidth = canvasWidth;
+		this.canvasHeight = canvasHeight;
+		this.customSized = true;
 	}
 }

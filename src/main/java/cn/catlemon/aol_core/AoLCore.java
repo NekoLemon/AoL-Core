@@ -75,5 +75,10 @@ public class AoLCore {
 			super(MODID, location, offset, width, height);
 		}
 		
+		public AoLResourceLocation(String location, @Nonnull Coordinate<Integer> offset, @Nonnull Integer width,
+				@Nonnull Integer height, @Nonnull Integer canvasWidth, @Nonnull Integer canvasHeight) {
+			super(MODID, location, offset, width, height, canvasWidth, canvasHeight);
+		}
+		
 	}
 }
