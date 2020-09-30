@@ -468,6 +468,7 @@ public class GuiSkillTree extends GuiScreen {
 				fontRenderer.drawString(spEach, descScreenLeft + 2, currentHeight, 0xffffff);
 				currentHeight += 9;
 			}
+			currentHeight += 3;
 		}
 		Set<String> dependencies = currentSelectedSkill.getSkillDependencies();
 		if (dependencies.size() > 0) {
