@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketSkillPoint implements IMessage {
-	public NBTTagCompound compound;
+	public NBTTagCompound compound = null;
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {

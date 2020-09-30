@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketTranslate implements IMessage {
-	private TranslateText text;
+	private TranslateText text = null;
 	
 	public PacketTranslate() {
 		

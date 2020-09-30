@@ -15,6 +15,7 @@ public class SkillExample2 extends SkillBase {
 		skillPointRequirement.put(AoLCore.MODID + ".special", 1);
 		skillDependencies.add(AoLCore.MODID + ".example");
 		skillCor = new Coordinate<Integer>(1, 1);
+		learnLevel = 4;
 	}
 	
 	@SubscribeEvent

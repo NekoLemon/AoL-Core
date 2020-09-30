@@ -1,6 +1,8 @@
 package cn.catlemon.aol_core.gui.skilltree;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +89,7 @@ public class GuiSkillTree extends GuiScreen {
 	private Set<String> skills = null;
 	
 	private enum SkillState {
-		UNSURE, UNLEARNABLE, LEARNABLE, SELECTED_LEARNABLE, LEARNED, SELECTED_LEARNED
+		UNINITIALIZED, UNLEARNABLE, LEARNABLE, SELECTED_LEARNABLE, LEARNED, SELECTED_LEARNED, LEARN_LEVEL_FAULT
 	};
 	
 	private Map<String, SkillState> skillState = new HashMap<String, SkillState>();
@@ -109,7 +111,7 @@ public class GuiSkillTree extends GuiScreen {
 		int minX = -10000, minY = -10000;
 		int maxX = 10000, maxY = 10000;
 		for (String skillId : skills) {
-			skillState.put(skillId, SkillState.UNSURE);
+			skillState.put(skillId, SkillState.UNINITIALIZED);
 			Coordinate<Integer> skillCor = page.getSkill(skillId).getSkillLocation();
 			minX = skillCor.x * 48 > minX ? skillCor.x * 48 : minX;
 			minY = -skillCor.y * 48 > minY ? -skillCor.y * 48 : minY;
@@ -261,7 +263,7 @@ public class GuiSkillTree extends GuiScreen {
 		for (String skillId : skills) {
 			SkillBase skill = page.getSkill(skillId);
 			Coordinate<Integer> cor = skill.getSkillLocation();
-			if (skillState.get(skillId) == SkillState.UNSURE)
+			if (skillState.get(skillId) == SkillState.UNINITIALIZED)
 				continue;
 			PackedResourceLocation skillBackground = (skill.getSkillBackground() == null) ? DEFAULT_SKILL_BACKGROUND
 					: skill.getSkillBackground();
@@ -290,6 +292,10 @@ public class GuiSkillTree extends GuiScreen {
 					baseY = sizeY;
 					break;
 				case UNLEARNABLE:
+					baseX = 0;
+					baseY = 0;
+					break;
+				case LEARN_LEVEL_FAULT:
 					baseX = 0;
 					baseY = 0;
 					break;
@@ -447,31 +453,41 @@ public class GuiSkillTree extends GuiScreen {
 		String desc = I18n.format("misc.skill." + currentSelectedSkill.getSkillId() + ".desc");
 		if (!desc.equals("misc.skill." + currentSelectedSkill.getSkillId() + ".desc")) {
 			desc = "§r" + I18n.format("gui." + AoLCore.MODID + ".skilltree.desc.foramt")
-					+ fontRenderer.trimStringToWidth(desc, 6 * DESC_SCREEN_WIDTH - 60, true);
+					+ fontRenderer.trimStringToWidth(desc, 4 * DESC_SCREEN_WIDTH - 40, true);
 			fontRenderer.drawSplitString(desc, descScreenLeft + 2, currentHeight, DESC_SCREEN_WIDTH - 4, 0xffffff);
 		}
-		currentHeight += 60;
+		currentHeight += 40;
+		if (skillState.get(currentSelectedSkill.getSkillId()) == SkillState.LEARN_LEVEL_FAULT) {
+			String learnLevelFault = "§4" + I18n.format("gui." + AoLCore.MODID + ".skilltree.learnlevel.fault",
+					currentSelectedSkill.getLearnLevel());
+			fontRenderer.drawStringWithShadow(learnLevelFault, descScreenLeft + 2, currentHeight, 0xffffff);
+			currentHeight += 12;
+		}
 		Map<String, Integer> spRequirement = currentSelectedSkill.getSkillPointRequirement();
 		if (spRequirement.size() > 0) {
 			String spPre = I18n.format("gui." + AoLCore.MODID + ".skilltree.sp.pre");
 			fontRenderer.drawString(spPre, descScreenLeft + 2, currentHeight, 0xffffff);
 			currentHeight += 10;
 			ISkillPoint sp = player.getCapability(CapabilityHandler.capSkillPoint, null);
-			for (Map.Entry<String, Integer> entry : spRequirement.entrySet()) {
-				String spFormat = (sp.getSPNum(entry.getKey()) >= entry.getValue()) ? "§2" : "§4";
-				String spName = I18n.format("misc.skillpoint." + entry.getKey().toLowerCase());
-				if (spName.equals("misc.skillpoint." + entry.getKey().toLowerCase()))
-					spName = I18n.format("misc.skillpoint.unknown", entry.getKey());
-				String spEach = "    " + I18n.format("gui." + AoLCore.MODID + ".skilltree.sp.each", spName,
-						entry.getValue(), sp.getSPNum(entry.getKey()));
+			List<String> spTypeList = new ArrayList<String>(spRequirement.keySet());
+			Collections.sort(spTypeList);
+			for (String spType : spTypeList) {
+				int spNum = spRequirement.get(spType);
+				String spFormat = (sp.getSPNum(spType) >= spNum) ? "§2" : "§4";
+				String spName = I18n.format("misc.skillpoint." + spType.toLowerCase());
+				if (spName.equals("misc.skillpoint." + spType.toLowerCase()))
+					spName = I18n.format("misc.skillpoint.unknown", spType);
+				String spEach = "    " + I18n.format("gui." + AoLCore.MODID + ".skilltree.sp.each", spName, spNum,
+						sp.getSPNum(spType));
 				spEach = spFormat + fontRenderer.trimStringToWidth(spEach, DESC_SCREEN_WIDTH - 4);
 				fontRenderer.drawString(spEach, descScreenLeft + 2, currentHeight, 0xffffff);
 				currentHeight += 9;
 			}
 			currentHeight += 3;
 		}
-		Set<String> dependencies = currentSelectedSkill.getSkillDependencies();
+		List<String> dependencies = new ArrayList<String>(currentSelectedSkill.getSkillDependencies());
 		if (dependencies.size() > 0) {
+			Collections.sort(dependencies);
 			String skPre = I18n.format("gui." + AoLCore.MODID + ".skilltree.sk.pre");
 			fontRenderer.drawString(skPre, descScreenLeft + 2, currentHeight, 0xffffff);
 			currentHeight += 10;
@@ -527,8 +543,8 @@ public class GuiSkillTree extends GuiScreen {
 				if (thisPageContainsActiveOne && tab == currentTab) {
 					continue;
 				} else {
-					if (mouseX >= guiLeft + WINDOW.width && mouseX < GUI_WIDTH && mouseY >= guiTop + 24 * tab + 8
-							&& mouseY < guiTop + 24 * tab + 32) {
+					if (mouseX >= guiLeft + WINDOW.width && mouseX < guiLeft + GUI_WIDTH
+							&& mouseY >= guiTop + 24 * tab + 8 && mouseY < guiTop + 24 * tab + 32) {
 						player.openGui(AoLCore.instance, GuiHandler.Gui_SKILLTREE, player.world,
 								currentPage * TABS_IN_ONE_PAGE + tab, 1, 0);
 					}
@@ -559,7 +575,7 @@ public class GuiSkillTree extends GuiScreen {
 			Coordinate<Integer> cor = skill.getSkillLocation();
 			int startX = skillScreenLeft + SKILL_SCREEN_WIDTH / 2 + x + cor.x * 48 - 12;
 			int startY = skillScreenTop + SKILL_SCREEN_HEIGHT / 2 + y - cor.y * 48 - 12;
-			if (skillState.get(skillId) == SkillState.UNSURE)
+			if (skillState.get(skillId) == SkillState.UNINITIALIZED)
 				continue;
 			int sizeX = 24, sizeY = 24;
 			if (startX < skillScreenLeft) {
@@ -610,7 +626,7 @@ public class GuiSkillTree extends GuiScreen {
 				skillState.replace(entry.getKey(), SkillState.LEARNED);
 				continue;
 			}
-			boolean couldLearn = skill.getLearnLevel() <= learnLevel;
+			boolean couldLearn = true;
 			ISkillPoint sp = player.getCapability(CapabilityHandler.capSkillPoint, null);
 			for (Map.Entry<String, Integer> entrySP : skill.getSkillPointRequirement().entrySet()) {
 				if (sp.getSPNum(entrySP.getKey()) < entrySP.getValue()) {
@@ -625,7 +641,10 @@ public class GuiSkillTree extends GuiScreen {
 					break;
 				}
 			}
-			skillState.replace(entry.getKey(), couldLearn ? SkillState.LEARNABLE : SkillState.UNLEARNABLE);
+			if (skill.getLearnLevel() <= learnLevel)
+				skillState.replace(entry.getKey(), couldLearn ? SkillState.LEARNABLE : SkillState.UNLEARNABLE);
+			else
+				skillState.replace(entry.getKey(), SkillState.LEARN_LEVEL_FAULT);
 		}
 		if (currentSelectedSkill != null) {
 			switch (skillState.get(currentSelectedSkill.getSkillId())) {
